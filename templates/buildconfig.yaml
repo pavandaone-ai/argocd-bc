@@ -1,0 +1,30 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: {{ include "helm-build-demo.fullname" . }}-build
+  labels:
+    {{- include "helm-build-demo.labels" . | nindent 4 }}
+spec:
+  source:
+    type: Dockerfile
+    dockerfile: |
+      FROM registry.access.redhat.com/ubi8/ubi-minimal
+
+      # Super simple demo container that exposes 8080 and just sleeps
+      EXPOSE 8080
+      CMD ["bash", "-c", "echo 'Hello from {{ include "helm-build-demo.name" . }}'; sleep 3600"]
+
+  strategy:
+    type: Docker
+    dockerStrategy: {}
+
+  output:
+    to:
+      kind: DockerImage
+      name: "{{ .Values.image.registry }}/{{ .Values.image.org }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+    pushSecret:
+      name: {{ .Values.image.registrySecretName | quote }}
+
+  triggers:
+    # Start a build when the BuildConfig is created / changed
+    - type: ConfigChange
