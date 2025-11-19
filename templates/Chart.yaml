@@ -4,3 +4,8 @@ description: Simple demo chart that builds an image via OpenShift BuildConfig an
 type: application
 version: 0.1.0
 appVersion: "1.0.0"
+
+
+
+
+I updated the BuildConfig to use an inline Dockerfile and tested the build. The base image pulled successfully, but the build failed earlier because the inline Dockerfile didn’t have permission to write to /usr/share/nginx/html. I corrected this by adding USER 0 for the file-creation step and switching back to a non-root user. The updated inline Dockerfile is now applied through ArgoCD and ready for the next build test.
