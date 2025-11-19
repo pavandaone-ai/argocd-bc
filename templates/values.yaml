@@ -17,3 +17,21 @@ service:
 # Then paste the output below.
 quay:
   dockerconfigjson: "PASTE_BASE64_DOCKERCONFIGJSON_HERE"
+
+
+
+---new
+
+
+buildConfig:
+  name: bcbsfl-nginx-git-build
+  appLabel: bcbsfl-nginx-git
+
+git:
+  repoUrl: https://gitlab.bcbfs1.com/n5bp/bcbsfl-nginx-demo.git
+  revision: main
+  contextDir: .
+
+output:
+  image: quay-enterprise.apps.ose4-dev.bcbfs1.com/n5bp/argocd-cicd:pavan
+  pushSecret: n5bp-test-pull-secret
