@@ -1,108 +1,32 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  name: bcbsfl-nginx-inline-build
+  name: bcbsfl-nginx-git-build
   labels:
-    app: bcbsfl-nginx-inline
+    app: bcbsfl-nginx-git
 spec:
-  # --- SOURCE: INLINE DOCKERFILE, NO GIT ---
+  # --- SOURCE: CLONE FROM GIT REPO ---
   source:
-    type: Dockerfile
-    dockerfile: |
-      FROM nginx:1.27-alpine
+    type: Git
+    git:
+      uri: https://gitlab.bcbfs1.com/n5bp/bcbsfl-nginx-demo.git  # <-- your repo
+      ref: main                                                  # branch name
+    contextDir: .                                                # root folder in repo
 
-      # Overwrite default nginx index.html with our custom message
-      RUN printf '%s\n' \
-        '<!DOCTYPE html>' \
-        '<html>' \
-        '  <head><title>BCBSFL Nginx Demo</title></head>' \
-        '  <body><h1>welcome to bcbsfl</h1></body>' \
-        '</html>' \
-        > /usr/share/nginx/html/index.html
-
-      EXPOSE 80
-
-  # --- BUILD STRATEGY: DOCKER ---
+  # --- BUILD STRATEGY: DOCKER (Dockerfile in repo) ---
   strategy:
     type: Docker
-    dockerStrategy: {}
+    dockerStrategy: {}   # no inline Dockerfile here
 
   # --- OUTPUT: PUSH IMAGE TO QUAY ---
   output:
     to:
       kind: DockerImage
-      name: quay.io/bcbsfl/bcbsfl-nginx-inline:latest   # <--- change org/repo if needed
+      name: quay-enterprise.apps.ose4-dev.bcbfs1.com/n5bp/argocd-cicd:pavan
     pushSecret:
-      name: quay-registry-secret                        # <--- must already exist in namespace
+      name: n5bp-test-pull-secret   # must exist in the namespace
 
-  # --- TRIGGERS ---
+  # --- TRIGGERS (optional but useful) ---
   triggers:
     - type: ConfigChange
-
-
-
-
-
-
-new_---
-
-spec:
-  source:
-    type: Dockerfile
-    dockerfile: |
-      FROM quay-enterprise.apps.ose4-dev.bcbsfl.com/ocp-image/nginx-124-ubi9
-
-      # Create a very simple index.html
-      RUN mkdir -p /usr/share/nginx/html && \
-          printf '%s\n' \
-            '<!DOCTYPE html>' \
-            '<html>' \
-            '  <head><title>BCBSFL Nginx Demo</title></head>' \
-            '  <body><h1>welcome to bcbsfl</h1></body>' \
-            '</html>' \
-            > /usr/share/nginx/html/index.html
-
-      # Optional – expose port if you want (build will succeed even without this)
-      EXPOSE 8080
-
-
-
---new
-
-
-apiVersion: build.openshift.io/v1
-kind: BuildConfig
-metadata:
-  name: bcbsfl-nginx-inline-build
-  labels:
-    app: bcbsfl-nginx-inline
-spec:
-  source:
-    type: Dockerfile
-    dockerfile: |
-      FROM quay-enterprise.apps.ose4-dev.bcbsfl.com/ocp-image/nginx-124-ubi9
-
-      RUN mkdir -p /usr/share/nginx/html && \
-          printf '%s\n' \
-            '<!DOCTYPE html>' \
-            '<html>' \
-            '  <head><title>BCBSFL Nginx Demo</title></head>' \
-            '  <body><h1>welcome to bcbsfl</h1></body>' \
-            '</html>' \
-            > /usr/share/nginx/html/index.html
-
-      EXPOSE 8080
-
-  strategy:
-    type: Docker
-    dockerStrategy: {}
-
-  output:
-    to:
-      kind: DockerImage
-      name: quay-enterprise.apps.ose4-dev.bcbsfl.com/n5bp/argocd-cicd:latest
-    pushSecret:
-      name: n5bp-test-pull-secret    # must already exist in the namespace
-
-  triggers:
-    - type: ConfigChange
+    - type: ImageChange
