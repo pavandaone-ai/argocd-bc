@@ -1,32 +1,43 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  name: bcbsfl-nginx-git-build
+  name: bcbsfl-nginx-inline-build
   labels:
-    app: bcbsfl-nginx-git
+    app: bcbsfl-nginx-inline
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"   # <--- precedence: BuildConfig first
 spec:
-  # --- SOURCE: CLONE FROM GIT REPO ---
+  # --- SOURCE: INLINE DOCKERFILE, NO GIT ---
   source:
-    type: Git
-    git:
-      uri: https://gitlab.bcbfs1.com/n5bp/bcbsfl-nginx-demo.git  # <-- your repo
-      ref: main                                                  # branch name
-    contextDir: .                                                # root folder in repo
+    type: Dockerfile
+    dockerfile: |
+      FROM quay-enterprise.apps.ose4-dev.bcbsfl.com/ocp-image/nginx-124-ubi9
 
-  # --- BUILD STRATEGY: DOCKER (Dockerfile in repo) ---
+      USER 0
+      RUN mkdir -p /usr/share/nginx/html && \
+          printf '%s\n' \
+            '<!DOCTYPE html>' \
+            '<html>' \
+            '  <head><title>BCBSFL Nginx Demo</title></head>' \
+            '  <body><h1>welcome to bcbsfl</h1></body>' \
+            '</html>' \
+            > /usr/share/nginx/html/index.html && \
+          chmod 644 /usr/share/nginx/html/index.html
+      USER 1001
+
+  # --- BUILD STRATEGY: DOCKER ---
   strategy:
     type: Docker
-    dockerStrategy: {}   # no inline Dockerfile here
+    dockerStrategy: {}
 
   # --- OUTPUT: PUSH IMAGE TO QUAY ---
   output:
     to:
       kind: DockerImage
-      name: quay-enterprise.apps.ose4-dev.bcbfs1.com/n5bp/argocd-cicd:pavan
+      name: quay-enterprise.apps.ose4-dev.bcbsfl.com/n5bp/argocd-cicd:pavan3
     pushSecret:
-      name: n5bp-test-pull-secret   # must exist in the namespace
+      name: n5bp-test-pull-secret
 
-  # --- TRIGGERS (optional but useful) ---
+  # --- TRIGGERS ---
   triggers:
     - type: ConfigChange
-    - type: ImageChange
