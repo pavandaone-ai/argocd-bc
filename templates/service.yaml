@@ -1,16 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm-build-demo.fullname" . }}
+  name: bcbsfl-nginx-inline
   labels:
-    {{- include "helm-build-demo.labels" . | nindent 4 }}
+    app: bcbsfl-nginx-inline
 spec:
   selector:
-    app.kubernetes.io/name: {{ include "helm-build-demo.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: bcbsfl-nginx-inline
   ports:
     - name: http
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+      port: 8080
+      targetPort: 8080
       protocol: TCP
   type: ClusterIP
