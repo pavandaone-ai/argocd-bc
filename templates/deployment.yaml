@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm-build-demo.fullname" . }}
+  labels:
+    {{- include "helm-build-demo.labels" . | nindent 4 }}
+  annotations:
+    # Make Argo apply this AFTER BuildConfig (higher wave)
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "helm-build-demo.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm-build-demo.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.image.registrySecretName | quote }}
+      containers:
+        - name: app
+          image: "{{ .Values.image.registry }}/{{ .Values.image.org }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: http
