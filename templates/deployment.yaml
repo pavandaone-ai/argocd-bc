@@ -1,29 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-build-demo.fullname" . }}
+  name: bcbsfl-nginx-inline
   labels:
-    {{- include "helm-build-demo.labels" . | nindent 4 }}
+    app: bcbsfl-nginx-inline
   annotations:
-    # Make Argo apply this AFTER BuildConfig (higher wave)
+    # Optional: make Argo apply this AFTER the BuildConfig
     argocd.argoproj.io/sync-wave: "2"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "helm-build-demo.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: bcbsfl-nginx-inline
   template:
     metadata:
       labels:
-        {{- include "helm-build-demo.labels" . | nindent 8 }}
+        app: bcbsfl-nginx-inline
     spec:
       imagePullSecrets:
-        - name: {{ .Values.image.registrySecretName | quote }}
+        - name: n5bp-test-pull-secret
       containers:
-        - name: app
-          image: "{{ .Values.image.registry }}/{{ .Values.image.org }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        - name: nginx
+          image: quay-enterprise.apps.ose4-dev.bcbsfl.com/n5bp/argocd-cicd:pavan3
           imagePullPolicy: Always
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: 8080   # change if your base image listens on a different port
               name: http
