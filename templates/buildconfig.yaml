@@ -41,3 +41,43 @@ spec:
   # --- TRIGGERS ---
   triggers:
     - type: ConfigChange
+
+
+
+
+    ------
+
+
+    spec:
+  # --- SOURCE: INLINE DOCKERFILE, NO GIT ---
+  source:
+    type: Dockerfile
+    dockerfile: |
+      FROM quay-enterprise.apps0e4-dev.bcbsfl.com/ocp-image/nginx-124-ubi9
+
+      # run as root to write files
+      USER 0
+      RUN mkdir -p /usr/share/nginx/html && \
+          printf '%s\n' \
+          '<!DOCTYPE html>' \
+          '<html>' \
+          '  <head><title>BCBSFL Nginx Demo</title></head>' \
+          '  <body><h1>Welcome to bcbfsfl</h1></body>' \
+          '</html>' \
+          > /usr/share/nginx/html/index.html && \
+          chmod 644 /usr/share/nginx/html/index.html
+
+      # drop back to non-root user (same as base image)
+      USER 1001
+
+      # container should listen on 8080
+      EXPOSE 8080
+
+      # **important**: keep nginx running in foreground
+      CMD ["nginx", "-g", "daemon off;"]
+
+  # --- BUILD STRATEGY: DOCKER ---
+  strategy:
+    type: Docker
+    dockerStrategy: {}
+
