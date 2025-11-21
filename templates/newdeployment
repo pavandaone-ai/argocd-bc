@@ -1,0 +1,107 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: bcbsfl-nginx-git-build
+  labels:
+    app: bcbsfl-nginx-git
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://gitlab.bcbsfl.com/git-paas/nginx-poc   # 👈 your repo
+      ref: main                                           # or your branch
+    contextDir: .                                         # root of repo
+    sourceSecret:
+      name: git-pull-secret                               # 👈 from your screenshot
+
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile                          # default, adjust if different
+      pullSecret:
+        name: n5bp-test-pull-secret                       # 👈 registry creds for base image pull
+
+  output:
+    to:
+      kind: DockerImage
+      name: quay-enterprise.apps.ose4-dev.bcbsfl.com/n5bp/argocd-cicd:1.1.1
+    pushSecret:
+      name: n5bp-test-pull-secret                         # 👈 registry push creds
+
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+    # you can also add webhooks later if CI triggers builds
+
+
+
+    ------
+
+
+
+    apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bcbsfl-nginx-git
+  labels:
+    app: bcbsfl-nginx-git
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bcbsfl-nginx-git
+  template:
+    metadata:
+      labels:
+        app: bcbsfl-nginx-git
+    spec:
+      containers:
+        - name: bcbsfl-nginx-git
+          image: quay-enterprise.apps.ose4-dev.bcbsfl.com/n5bp/argocd-cicd:1.1.1
+          imagePullPolicy: Always                 # 👈 always pull latest for this tag
+          ports:
+            - containerPort: 80                  # nginx default
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+      imagePullSecrets:
+        - name: n5bp-test-pull-secret            # 👈 same registry secret
+
+------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bcbsfl-nginx-git-svc
+  labels:
+    app: bcbsfl-nginx-git
+spec:
+  type: ClusterIP
+  selector:
+    app: bcbsfl-nginx-git
+  ports:
+    - name: http
+      port: 80          # what other pods / Route use
+      targetPort: 80    # containerPort in Deployment
+-----
+
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: bcbsfl-nginx-git-route
+  labels:
+    app: bcbsfl-nginx-git
+spec:
+  to:
+    kind: Service
+    name: bcbsfl-nginx-git-svc
+  port:
+    targetPort: http
+  tls:
+    termination: edge      # adjust if your cluster uses reencrypt/passthrough
+
