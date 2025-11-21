@@ -48,8 +48,11 @@ spec:
     ------
 
 
-    spec:
-  # --- SOURCE: INLINE DOCKERFILE, NO GIT ---
+ apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: bcbsfl-nginx-inline-build
+spec:
   source:
     type: Dockerfile
     dockerfile: |
@@ -73,11 +76,16 @@ spec:
       # container should listen on 8080
       EXPOSE 8080
 
-      # **important**: keep nginx running in foreground
+      # keep nginx running in foreground
       CMD ["nginx", "-g", "daemon off;"]
 
-  # --- BUILD STRATEGY: DOCKER ---
   strategy:
     type: Docker
     dockerStrategy: {}
 
+  output:
+    to:
+      kind: DockerImage
+      name: quay-enterprise.apps0e4-dev.bcbsfl.com/n5bp/argocd-cicd:pavan3
+    pushSecret:
+      name: n5bp-test-pull-secret
