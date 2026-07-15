@@ -1,13 +1,1 @@
-1. Current Status
-
-After increasing the Sensor memory limit to 36Gi and increasing the Process Indicator buffer to 200000, we were able to generate the vulnerability report successfully. However, today we observed that the Sensor memory usage increased to approximately 37Gi, and the Sensor pod restarted again.
-
-2. Root Cause Analysis
-
-Our main concern is identifying the root cause of this issue. We cannot continue increasing the Sensor memory limit every time the memory usage grows. We would like your help in identifying what is causing the Sensor memory usage to continuously increase. Is it due to a specific workload, process indicator events, a memory leak, or another issue? We also want to understand why this started happening recently, even though the environment was previously stable.
-
-We need to identify the root cause so we can implement a permanent fix, set up appropriate monitoring and alerts, and provide a clear explanation to our leadership on why the Sensor is consuming more memory and experiencing OOM/restarts.
-
-We are planning to temporarily increase the Sensor memory limit to 40Gi to keep the environment stable, but we would appreciate your guidance on the permanent resolution.
-
-If possible, we would also like to schedule a troubleshooting call to review this together.
+oc get pod <pod-name> -n illumio-system -o jsonpath='{.status.containerStatuses[*].lastState.terminated.reason}{" "}{.status.containerStatuses[*].lastState.terminated.exitCode}{"\n"}'
