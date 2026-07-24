@@ -49,3 +49,26 @@ with open("mcp-images.txt", "w") as out:
     out.write("\n".join(images))
 
 print(f"Done! Created mcp-images.txt with {len(images)} unique images.")
+
+
+
+
+
+$images = Get-Content .\mcp-images.txt
+
+oc get pods -A -o json | ConvertFrom-Json | ForEach-Object {
+    foreach ($pod in $_.items) {
+        foreach ($container in $pod.spec.containers) {
+            if ($images -contains $container.image) {
+                [PSCustomObject]@{
+                    Namespace = $pod.metadata.namespace
+                    Pod       = $pod.metadata.name
+                    Container = $container.name
+                    Image     = $container.image
+                    Status    = $pod.status.phase
+                    Created   = $pod.metadata.creationTimestamp
+                }
+            }
+        }
+    }
+} | Export-Csv .\mcp-runtime-report.csv -NoTypeInformation
