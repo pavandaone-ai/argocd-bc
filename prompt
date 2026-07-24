@@ -31,3 +31,21 @@ with open("mcp-images.txt", "w", encoding="utf-8") as output:
 
 print(f"Created mcp-images.txt with {len(images)} unique images.")
 PY
+
+
+
+
+
+import csv
+
+csv_file = "RHACS_Vulnerability_"
+
+with open(csv_file, newline="", encoding="utf-8-sig") as f:
+    reader = csv.DictReader(f)
+
+    images = sorted(set(row["Image"].strip() for row in reader if row["Image"].strip()))
+
+with open("mcp-images.txt", "w") as out:
+    out.write("\n".join(images))
+
+print(f"Done! Created mcp-images.txt with {len(images)} unique images.")
