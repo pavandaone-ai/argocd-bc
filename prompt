@@ -1,1 +1,33 @@
-Thank you for sharing the concerns regarding IAM Identity Center. That definitely helps us understand the potential challenges. Our primary goal is to understand your current implementation for accessing and switching between multiple AWS accounts (such as Dev, Stage, Sandbox, and Production). Could you please explain the approach your team is currently using for authentication, role switching, and AWS CLI access? We’d appreciate a walkthrough of the current workflow so we can better understand the standard approach being followed by the Cloud Team.
+python3 - 'YOUR_REPORT.csv' <<'PY'
+import csv
+import sys
+
+filename = sys.argv[1]
+
+with open(filename, newline="", encoding="utf-8-sig") as f:
+    reader = csv.DictReader(f)
+
+    image_column = next(
+        (
+            column for column in reader.fieldnames or []
+            if column.strip().lower() == "image"
+        ),
+        None,
+    )
+
+    if not image_column:
+        raise SystemExit(
+            f"Image column not found. Available columns: {reader.fieldnames}"
+        )
+
+    images = sorted({
+        row[image_column].strip()
+        for row in reader
+        if row.get(image_column, "").strip()
+    })
+
+with open("mcp-images.txt", "w", encoding="utf-8") as output:
+    output.write("\n".join(images) + "\n")
+
+print(f"Created mcp-images.txt with {len(images)} unique images.")
+PY
