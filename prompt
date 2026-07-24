@@ -72,3 +72,29 @@ oc get pods -A -o json | ConvertFrom-Json | ForEach-Object {
         }
     }
 } | Export-Csv .\mcp-runtime-report.csv -NoTypeInformation
+
+
+
+
+
+
+
+
+To better understand the request and complete the OpenShift configuration, could you please provide the following information?
+
+1. Which OpenShift cluster and namespace is each service deployed in?
+2. For each external endpoint, which internal OpenShift Service should it route to?
+3. What is the Service port/target port for each service?
+4. Do the external routes already exist and only need to be updated, or do new Routes need to be created?
+5. What is the external hostname/URL for each endpoint?
+6. Which environments are included in this request (Dev, Test, Stage, Production)?
+7. Is there any authentication, TLS certificate, or API Gateway/NetScaler configuration required for these endpoints, or is that already in place?
+8. Are there any existing Route YAMLs or deployment manifests that should be updated instead of creating new ones?
+9. Is there a mapping document showing:
+    * External endpoint
+    * Internal OpenShift Service
+    * Namespace
+    * Port
+10. Is there any expected validation or testing procedure after the routing changes are completed?
+
+Thank you!
