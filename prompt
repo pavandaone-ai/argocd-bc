@@ -1,3 +1,14 @@
-Hi team, I have a question regarding the new external Route creation. Do we have a standard naming convention for creating an additional Route for an existing Service?
+bodyBytes, err := io.ReadAll(res.Body)
+if err != nil {
+	log.Fatal(err)
+}
 
-Also, for these new external Routes, do we typically reuse the existing host and just add a new path, or do we create a new host as well?
+var tokenResponse struct {
+	AccessToken string `json:"access_token"`
+}
+
+if err := json.Unmarshal(bodyBytes, &tokenResponse); err != nil {
+	log.Fatal(err)
+}
+
+return tokenResponse.AccessToken
