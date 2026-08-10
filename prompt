@@ -1,14 +1,2 @@
-bodyBytes, err := io.ReadAll(res.Body)
-if err != nil {
-	log.Fatal(err)
-}
-
-var tokenResponse struct {
-	AccessToken string `json:"access_token"`
-}
-
-if err := json.Unmarshal(bodyBytes, &tokenResponse); err != nil {
-	log.Fatal(err)
-}
-
-return tokenResponse.AccessToken
+var SERVICENOW_CLIENT_ID = os.Getenv("SERVICENOW_CLIENT_ID")
+var SERVICENOW_CLIENT_SECRET = os.Getenv("SERVICENOW_CLIENT_SECRET")
