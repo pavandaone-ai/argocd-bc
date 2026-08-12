@@ -1,2 +1,8 @@
-var SERVICENOW_CLIENT_ID = os.Getenv("SERVICENOW_CLIENT_ID")
-var SERVICENOW_CLIENT_SECRET = os.Getenv("SERVICENOW_CLIENT_SECRET")
+65  fmt.Println("Testing ServiceNow authentication...")
+66  session_token := actions.Authlogin(SERVICENOW_CLIENT_ID, SERVICENOW_CLIENT_SECRET)
+67  if session_token == "" {
+68      fmt.Println("ServiceNow authentication FAILED - no access token received")
+69      return
+70  }
+71  fmt.Println("ServiceNow authentication SUCCESSFUL - access token received")
+72  return
