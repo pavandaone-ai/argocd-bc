@@ -1,23 +1,4 @@
-package main
-
-import (
-	"bcbsfl/ocp/myit-ose-api/actions"
-	"fmt"
-	"os"
-)
-
-func main() {
-	clientID := os.Getenv("SERVICENOW_CLIENT_ID")
-	clientSecret := os.Getenv("SERVICENOW_CLIENT_SECRET")
-
-	fmt.Println("Testing ServiceNow authentication...")
-
-	token := actions.Authlogin(clientID, clientSecret)
-
-	if token == "" {
-		fmt.Println("ServiceNow authentication FAILED")
-		return
-	}
-
-	fmt.Println("ServiceNow authentication SUCCESSFUL - access token received")
+if res.StatusCode >= 300 {
+    fmt.Println("ServiceNow OAuth error:", string(bodyBytes))
+    return ""
 }
