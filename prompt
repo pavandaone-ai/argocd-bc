@@ -1,8 +1,23 @@
-65  fmt.Println("Testing ServiceNow authentication...")
-66  session_token := actions.Authlogin(SERVICENOW_CLIENT_ID, SERVICENOW_CLIENT_SECRET)
-67  if session_token == "" {
-68      fmt.Println("ServiceNow authentication FAILED - no access token received")
-69      return
-70  }
-71  fmt.Println("ServiceNow authentication SUCCESSFUL - access token received")
-72  return
+package main
+
+import (
+	"bcbsfl/ocp/myit-ose-api/actions"
+	"fmt"
+	"os"
+)
+
+func main() {
+	clientID := os.Getenv("SERVICENOW_CLIENT_ID")
+	clientSecret := os.Getenv("SERVICENOW_CLIENT_SECRET")
+
+	fmt.Println("Testing ServiceNow authentication...")
+
+	token := actions.Authlogin(clientID, clientSecret)
+
+	if token == "" {
+		fmt.Println("ServiceNow authentication FAILED")
+		return
+	}
+
+	fmt.Println("ServiceNow authentication SUCCESSFUL - access token received")
+}
