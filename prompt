@@ -43,4 +43,6 @@ type results struct {
     Result []result `json:"result"`
 }
 
-fmt.Println("List CRQ status code:", listres.StatusCode)
+crq_slice := actions.Listcrqs(session_token)
+
+fmt.Println("CRQ count:", len(crq_slice))
