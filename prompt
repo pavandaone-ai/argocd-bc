@@ -28,3 +28,14 @@ RawQuery: "sysparm_query=assignment_group%3D<ASSIGNMENT_GROUP_SYS_ID>%5Eshort_de
 RawQuery: "sysparm_query=assignment_group%3D%5Eshort_description%3DOpenShift%20Application%20%2F%20Create%20Deployment%5Estate%3D-2&sysparm_fields=number%2Cshort_description%2Cassignment_group%2Cdescription%2Cstate%2Csys_id&sysparm_limit=10&sysparm_display_value=true",
 
 listcrq.Header.Add("Accept", "application/json")
+
+
+
+type result struct {
+    Number string `json:"number"`
+    SysID  string `json:"sys_id"`
+}
+
+type results struct {
+    Result []result `json:"result"`
+}
