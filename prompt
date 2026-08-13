@@ -13,3 +13,11 @@ fmt.Println("OAuth request body length:", len(form.Encode()))
 
 proxyURL, _ := http.ProxyFromEnvironment(r)
 fmt.Println("Go proxy:", proxyURL)
+
+
+
+formData := "grant_type=client_credentials" +
+	"&client_id=" + url.QueryEscape(clientID) +
+	"&client_secret=" + url.QueryEscape(clientSecret)
+
+body := strings.NewReader(formData)
