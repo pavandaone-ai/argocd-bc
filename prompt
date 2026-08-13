@@ -4,3 +4,7 @@ curl -vk --ssl-no-revoke -X POST "https://$SERVICENOW_API_HOST/oauth_token.do" -
 fmt.Println("OAuth URL:", u.String())
 fmt.Println("Client ID length:", len(clientID))
 fmt.Println("Client Secret length:", len(clientSecret))
+
+
+
+fmt.Println("OAuth request body length:", len(form.Encode()))
