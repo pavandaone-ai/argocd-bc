@@ -36,6 +36,9 @@ type result struct {
     SysID  string `json:"sys_id"`
 }
 
+crq_slice := actions.Listcrqs(session_token)
+fmt.Println("CRQ count:", len(crq_slice))
+
 type results struct {
     Result []result `json:"result"`
 }
