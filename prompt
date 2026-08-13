@@ -8,3 +8,8 @@ fmt.Println("Client Secret length:", len(clientSecret))
 
 
 fmt.Println("OAuth request body length:", len(form.Encode()))
+
+
+
+proxyURL, _ := http.ProxyFromEnvironment(r)
+fmt.Println("Go proxy:", proxyURL)
