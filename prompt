@@ -39,3 +39,5 @@ type result struct {
 type results struct {
     Result []result `json:"result"`
 }
+
+fmt.Println("List CRQ status code:", listres.StatusCode)
