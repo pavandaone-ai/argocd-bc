@@ -1,4 +1,1 @@
-if res.StatusCode >= 300 {
-    fmt.Println("ServiceNow OAuth error:", string(bodyBytes))
-    return ""
-}
+curl -vk --ssl-no-revoke -X POST "https://$SERVICENOW_API_HOST/oauth_token.do" -H "Content-Type: application/x-www-form-urlencoded" -H "Accept: application/json" --data-urlencode "grant_type=client_credentials" --data-urlencode "client_id=$SERVICENOW_CLIENT_ID" --data-urlencode "client_secret=$SERVICENOW_CLIENT_SECRET"
