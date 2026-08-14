@@ -46,3 +46,12 @@ type results struct {
 crq_slice := actions.Listcrqs(session_token)
 
 fmt.Println("CRQ count:", len(crq_slice))
+
+
+Hi Vikas,
+
+I wanted to provide a quick update on the MyIT/Remedy to ServiceNow migration. The ServiceNow OAuth authentication is now working successfully from the Go application, and I am currently updating and testing the remaining functions, including List CRQs, List Tasks, notes, and task status updates.
+
+I also confirmed with Aneesh and Kavitha that there is no direct business impact if the migration is not completed today. The only temporary impact is that the deployment creation currently handled through the MyIT automation will need to be performed manually by our team until the migration is completed.
+
+I am targeting to complete the remaining integration and testing by early next week, Monday or Tuesday. Once that is completed, we should be able to restore the normal automated process through ServiceNow.
