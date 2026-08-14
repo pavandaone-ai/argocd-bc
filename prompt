@@ -64,3 +64,5 @@ fmt.Println("List CRQ response:", string(crq))
 
 
 RawQuery: "sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
+
+RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
