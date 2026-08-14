@@ -61,3 +61,6 @@ I am targeting to complete the remaining integration and testing by early next w
 
 fmt.Println("List CRQ status code:", listres.StatusCode)
 fmt.Println("List CRQ response:", string(crq))
+
+
+RawQuery: "sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
