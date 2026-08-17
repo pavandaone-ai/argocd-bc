@@ -93,3 +93,4 @@ We have successfully completed the OpenShift connection and the ServiceNow OAuth
 
 Where we are currently stuck is not authentication anymore. The remaining question is: how do we identify the exact ServiceNow request that is supposed to trigger this OpenShift deployment automation? Right now our query can return any scheduled PaaS change whose short description contains OpenShift, but that is too broad. We need the exact ServiceNow field and value that represents the old MyIT request type, something equivalent to “OpenShift Application / Create Deployment.”
 RawQuery: "sysparm_query=short_descriptionLIKECreate%20Deployment&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
+RawQuery: "sysparm_query=number%3DCRQ281429&sysparm_limit=1",
