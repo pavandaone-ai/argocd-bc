@@ -69,3 +69,6 @@ RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530&sys
 
 RawQuery: "sysparm_query=assignment_group%3DXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX%5Eshort_description%3DOpenShift%20Application%20%2F%20Create%20Deployment&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
 RawQuery: "sysparm_query=assignment_group%3DXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX%5Eshort_descriptionLIKEOpenShift&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
+
+
+RawQuery: "sysparm_query=assignment_group%3DXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX%5Eshort_descriptionLIKEOpenShift%5Estate%3D-2&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
