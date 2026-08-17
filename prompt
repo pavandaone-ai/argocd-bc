@@ -72,3 +72,18 @@ RawQuery: "sysparm_query=assignment_group%3DXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX%5Es
 
 
 RawQuery: "sysparm_query=assignment_group%3DXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX%5Eshort_descriptionLIKEOpenShift%5Estate%3D-2&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
+
+
+We have successfully completed the OpenShift connection and the ServiceNow OAuth authentication. We also converted and tested the first major ServiceNow function, Listcrqs(). The API is returning real change requests, and we confirmed that the assignment-group filter works, the OpenShift short-description filter works, and the ServiceNow state mapping works — for example, state=-2 correctly gives Scheduled change requests.
+
+Where we are currently stuck is not authentication anymore. The remaining question is: how do we identify the exact ServiceNow request that is supposed to trigger this OpenShift deployment automation? Right now our query can return any scheduled PaaS change whose short description contains OpenShift, but that is too broad. We need the exact ServiceNow field and value that represents the old MyIT request type, something equivalent to “OpenShift Application / Create Deployment.”
+
+So the question to ask the team is:
+
+“For a MyIT/ServiceNow request that should trigger this OpenShift deployment automation, which ServiceNow field identifies it as the ‘OpenShift Application / Create Deployment’ request, and what is the exact value of that field?”
+
+Once we get that answer, we can make the Listcrqs() query precise, then move to the next functions: Listtasks(), notes, task status updates, and finally the full end-to-end OpenShift deployment workflow.
+
+A short stand-up version would be:
+
+“Today I completed the OpenShift and ServiceNow authentication and validated the ServiceNow List CRQ API. The API is returning the correct PaaS/OpenShift records and the state filtering is working. The remaining item is to confirm which exact ServiceNow field/value identifies the deployment-creation request so we can make the CRQ filter precise. Once that is confirmed, I’ll continue with List Tasks and the remaining workflow.”
