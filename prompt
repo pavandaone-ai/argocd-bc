@@ -94,3 +94,24 @@ We have successfully completed the OpenShift connection and the ServiceNow OAuth
 Where we are currently stuck is not authentication anymore. The remaining question is: how do we identify the exact ServiceNow request that is supposed to trigger this OpenShift deployment automation? Right now our query can return any scheduled PaaS change whose short description contains OpenShift, but that is too broad. We need the exact ServiceNow field and value that represents the old MyIT request type, something equivalent to “OpenShift Application / Create Deployment.”
 RawQuery: "sysparm_query=short_descriptionLIKECreate%20Deployment&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
 RawQuery: "sysparm_query=number%3DCRQ281429&sysparm_limit=1",
+
+
+
+
+Team, I have been investigating the ACS Scanner/Config Controller pod evictions and repeated restarts.
+
+The findings point to node-level memory pressure rather than an ACS application issue. The affected pods show TerminationByKubelet with the message that the node was low on memory and had dropped below the kubelet eviction threshold.
+
+Current node utilization also shows the memory pressure continuing:
+
+* 001a – ~90% memory
+* 001b – ~100% memory
+* Other nodes currently have more available capacity
+
+001a has approximately 16 GiB physical memory / 12.5 GiB allocatable memory. I am confirming whether the other nodes have the same sizing.
+
+As a short-term mitigation, we can consider cordoning the impacted node to prevent additional workloads from scheduling there and allow affected pods to be recreated on nodes with more capacity.
+
+For the permanent fix, I recommend reviewing/increasing the memory capacity for these nodes/node pool and also validating the ACS pod memory requests/limits. The current memory headroom appears insufficient and has already resulted in kubelet evictions.
+
+Can we review the current node sizing and agree on the target memory size before making the change?
