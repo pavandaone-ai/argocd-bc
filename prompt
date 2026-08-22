@@ -1,9 +1,3 @@
-oc patch pvc prometheus-k8s-db-prometheus-k8s-0 \
-  -n openshift-monitoring \
-  --type merge \
-  -p '{"spec":{"resources":{"requests":{"storage":"128Gi"}}}}'
-
-oc patch pvc prometheus-k8s-db-prometheus-k8s-1 \
-  -n openshift-monitoring \
-  --type merge \
-  -p '{"spec":{"resources":{"requests":{"storage":"128Gi"}}}}'
+oc annotate namespace stackrox \
+  openshift.io/node-selector='node-role.kubernetes.io/infra=' \
+  --overwrite
