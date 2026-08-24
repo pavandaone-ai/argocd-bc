@@ -1,3 +1,20 @@
 oc annotate namespace stackrox \
   openshift.io/node-selector='node-role.kubernetes.io/infra=' \
   --overwrite
+
+
+
+- name: SERVICENOW_API_HOST
+  value: 
+
+- name: SERVICENOW_CLIENT_ID
+  valueFrom:
+    secretKeyRef:
+      name: servicenow-credentials
+      key: client-id
+
+- name: SERVICENOW_CLIENT_SECRET
+  valueFrom:
+    secretKeyRef:
+      name: servicenow-credentials
+      key: client-secret
