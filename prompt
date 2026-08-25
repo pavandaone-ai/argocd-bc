@@ -18,3 +18,5 @@ oc annotate namespace stackrox \
     secretKeyRef:
       name: servicenow-credentials
       key: client-secret
+
+RawQuery: "sysparm_query=number%3DCHG0037162&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
