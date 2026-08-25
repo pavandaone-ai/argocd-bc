@@ -17,3 +17,9 @@ fmt.Println("ServiceNow Tasks:", task_slice)
 
 
 fmt.Println("List Task status code:", listres.StatusCode)
+
+
+
+RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530%5Eparent%3D" +
+    changeSysID +
+    "%5Estate%3D1&sysparm_fields=number,sys_id,parent,state,short_description&sysparm_display_value=true",
