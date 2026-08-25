@@ -1,22 +1,19 @@
-oc annotate namespace stackrox \
-  openshift.io/node-selector='node-role.kubernetes.io/infra=' \
-  --overwrite
+var taskResponse struct {
+    Result []struct {
+        Number string `json:"number"`
+        SysID  string `json:"sys_id"`
+    } `json:"result"`
+}
+
+if err := json.Unmarshal(task, &taskResponse); err != nil {
+    log.Fatal(err)
+}
+
+for _, t := range taskResponse.Result {
+    task_slice = append(task_slice, t.SysID)
+}
+
+fmt.Println("ServiceNow Tasks:", task_slice)
 
 
-
-- name: SERVICENOW_API_HOST
-  value: 
-
-- name: SERVICENOW_CLIENT_ID
-  valueFrom:
-    secretKeyRef:
-      name: servicenow-credentials
-      key: client-id
-
-- name: SERVICENOW_CLIENT_SECRET
-  valueFrom:
-    secretKeyRef:
-      name: servicenow-credentials
-      key: client-secret
-
-RawQuery: "sysparm_query=number%3DCHG0037162&sysparm_fields=number,short_description,assignment_group,description,state,sys_id&sysparm_limit=10&sysparm_display_value=true",
+fmt.Println("List Task status code:", listres.StatusCode)
