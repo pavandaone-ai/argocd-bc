@@ -1,9 +1,12 @@
-requestBody := map[string]string{
-    "state": status,
+u := &url.URL{
+    Scheme:   "https",
+    Host:     SERVICENOW_API_HOST,
+    Path:     "/api/now/table/change_task",
+    RawQuery: "sysparm_query=number%3D" + myITid,
 }
 
 
 
-closetask.Header.Add("Content-Type", "application/json")
-closetask.Header.Add("Accept", "application/json")
-closetask.Header.Add("Authorization", "Bearer "+string(token))
+taskrequest.Header.Add("Content-Type", "application/json")
+taskrequest.Header.Add("Accept", "application/json")
+taskrequest.Header.Add("Authorization", "Bearer "+string(token))
