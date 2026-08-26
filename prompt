@@ -10,3 +10,21 @@ u := &url.URL{
 taskrequest.Header.Add("Content-Type", "application/json")
 taskrequest.Header.Add("Accept", "application/json")
 taskrequest.Header.Add("Authorization", "Bearer "+string(token))
+
+
+var objmap map[string]interface{}
+if err := json.Unmarshal(task, &objmap); err != nil {
+    log.Fatal(err)
+}
+
+results, ok := objmap["result"].([]interface{})
+if !ok || len(results) == 0 {
+    return "{}"
+}
+
+marshaled_data, err := json.MarshalIndent(results[0], "", "  ")
+if err != nil {
+    panic(err)
+}
+
+return string(marshaled_data)
