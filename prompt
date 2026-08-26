@@ -28,3 +28,10 @@ if err != nil {
 }
 
 return string(marshaled_data)
+
+
+crq_slice := actions.Listcrqs(session_token)
+fmt.Println("CRQ count:", len(crq_slice))
+
+task_slice := actions.Listtasks(crq_slice, session_token)
+fmt.Println("Task count:", len(task_slice))
