@@ -11,3 +11,14 @@ if len(task_slice) > 0 {
     fmt.Println("Task JSON:")
     fmt.Println(actions.Get_json("task", task_slice[0], session_token))
 }
+
+
+
+if len(task_slice) > 0 {
+    fmt.Println("Task JSON:")
+    fmt.Println(actions.Get_json("task", task_slice[0], session_token))
+
+    task_struct := actions.Get_notes(task_slice[0], session_token)
+    fmt.Println("Parsed task:")
+    fmt.Printf("%+v\n", task_struct)
+}
