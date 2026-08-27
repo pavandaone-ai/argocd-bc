@@ -1,3 +1,13 @@
 RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530%5Eparent%3D" +
     changeSysID +
     "&sysparm_fields=number,sys_id,parent,state,short_description&sysparm_display_value=true",
+
+
+
+
+fmt.Println("Task count:", len(task_slice))
+
+if len(task_slice) > 0 {
+    fmt.Println("Task JSON:")
+    fmt.Println(actions.Get_json("task", task_slice[0], session_token))
+}
