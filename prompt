@@ -7,3 +7,8 @@ if !ok || notes == "" {
     fmt.Println("ERROR: ServiceNow task description is empty")
     return DeploymentStruct{}
 }
+
+
+RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530%5Eparent%3D" +
+    changeSysID +
+    "%5Eshort_description%3DImplement&sysparm_fields=number,sys_id,parent,state,short_description,description&sysparm_display_value=true",
