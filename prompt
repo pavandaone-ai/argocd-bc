@@ -20,3 +20,10 @@ for _, t := range taskResponse.Result {
     fmt.Println("Task found:", t.Number, "sys_id:", t.SysID)
     task_slice = append(task_slice, t.SysID)
 }
+
+
+
+for _, t := range taskResponse.Result {
+    fmt.Println("Task found:", t.Number, "sys_id:", t.SysID)
+    task_slice = append(task_slice, t.SysID)
+}
