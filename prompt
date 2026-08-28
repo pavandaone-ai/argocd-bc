@@ -1,30 +1,9 @@
-RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530%5Eparent%3D" +
-    changeSysID +
-    "&sysparm_fields=number,sys_id,parent,state,short_description&sysparm_display_value=true",
+notes, ok := data4["description"].(string)
 
+fmt.Println("Get_notes task sys_id:", task)
+fmt.Println("Get_notes description:", notes)
 
-
-
-fmt.Println("Task count:", len(task_slice))
-
-if len(task_slice) > 0 {
-    fmt.Println("Task JSON:")
-    fmt.Println(actions.Get_json("task", task_slice[0], session_token))
+if !ok || notes == "" {
+    fmt.Println("ERROR: ServiceNow task description is empty")
+    return DeploymentStruct{}
 }
-
-
-
-if len(task_slice) > 0 {
-    fmt.Println("Task JSON:")
-    fmt.Println(actions.Get_json("task", task_slice[0], session_token))
-
-    task_struct := actions.Get_notes(task_slice[0], session_token)
-    fmt.Println("Parsed task:")
-    fmt.Printf("%+v\n", task_struct)
-}
-
-
-
-RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530%5Eparent%3D" +
-    changeSysID +
-    "%5Eshort_description%3DImplement&sysparm_fields=number,sys_id,parent,state,short_description&sysparm_display_value=true",
