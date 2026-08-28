@@ -1,29 +1,29 @@
-notes, ok := data4["description"].(string)
-
-fmt.Println("Get_notes task sys_id:", task)
-fmt.Println("Get_notes description:", notes)
-
-if !ok || notes == "" {
-    fmt.Println("ERROR: ServiceNow task description is empty")
-    return DeploymentStruct{}
-}
+clientset := actions.Connect_to_ose(HOST, ose_token)
 
 
-RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530%5Eparent%3D" +
-    changeSysID +
-    "%5Eshort_description%3DImplement&sysparm_fields=number,sys_id,parent,state,short_description,description&sysparm_display_value=true",
+if len(task_slice) > 0 {
+    fmt.Println("Task JSON:")
+    fmt.Println(actions.Get_json("task", task_slice[0], session_token))
 
+    task_struct := actions.Get_notes(task_slice[0], session_token)
+    fmt.Println("Parsed task:")
+    fmt.Printf("%+v\n", task_struct)
 
+    fmt.Println("About to create deployment:")
+    fmt.Println("Namespace:", task_struct.Namespace)
+    fmt.Println("Name:", task_struct.Name)
 
+    _, err := actions.CreateDeployment(
+        task_slice[0],
+        session_token,
+        task_struct.Namespace,
+        task_struct,
+        *clientset,
+    )
 
-for _, t := range taskResponse.Result {
-    fmt.Println("Task found:", t.Number, "sys_id:", t.SysID)
-    task_slice = append(task_slice, t.SysID)
-}
-
-
-
-for _, t := range taskResponse.Result {
-    fmt.Println("Task found:", t.Number, "sys_id:", t.SysID)
-    task_slice = append(task_slice, t.SysID)
+    if err != nil {
+        fmt.Println("Deployment creation FAILED:", err)
+    } else {
+        fmt.Println("Deployment creation SUCCESSFUL")
+    }
 }
