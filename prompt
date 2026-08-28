@@ -1,29 +1,6 @@
 clientset := actions.Connect_to_ose(HOST, ose_token)
 
-
-if len(task_slice) > 0 {
-    fmt.Println("Task JSON:")
-    fmt.Println(actions.Get_json("task", task_slice[0], session_token))
-
-    task_struct := actions.Get_notes(task_slice[0], session_token)
-    fmt.Println("Parsed task:")
-    fmt.Printf("%+v\n", task_struct)
-
-    fmt.Println("About to create deployment:")
-    fmt.Println("Namespace:", task_struct.Namespace)
-    fmt.Println("Name:", task_struct.Name)
-
-    _, err := actions.CreateDeployment(
-        task_slice[0],
-        session_token,
-        task_struct.Namespace,
-        task_struct,
-        *clientset,
-    )
-
-    if err != nil {
-        fmt.Println("Deployment creation FAILED:", err)
-    } else {
-        fmt.Println("Deployment creation SUCCESSFUL")
-    }
+if clientset == nil {
+    fmt.Println("ERROR: OpenShift clientset is nil")
+    return
 }
