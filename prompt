@@ -12,3 +12,11 @@ if !ok || notes == "" {
 RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530%5Eparent%3D" +
     changeSysID +
     "%5Eshort_description%3DImplement&sysparm_fields=number,sys_id,parent,state,short_description,description&sysparm_display_value=true",
+
+
+
+
+for _, t := range taskResponse.Result {
+    fmt.Println("Task found:", t.Number, "sys_id:", t.SysID)
+    task_slice = append(task_slice, t.SysID)
+}
