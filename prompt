@@ -1,6 +1,15 @@
-RawQuery: "sysparm_query=assignment_group%3D2eda98b78743ea50372f53dd3fbb3530" +
-    "%5Eparent%3D" + changeSysID +
-    "%5Eshort_description%3DIT%20SupportNow%20-%20OpenShift%20Application%20%2F%20Create%20Deployment" +
-    "%5Estate%3D1" +
-    "&sysparm_fields=number,sys_id,parent,state,short_description,description,change_task_type,assigned_to" +
-    "&sysparm_display_value=true",
+for ns := range ns_slice {
+    _, err := actions.CreateDeployment(
+        task_slice[i],
+        session_token,
+        ns_slice[ns],
+        task_struct,
+        *clientset,
+    )
+
+    if err != nil {
+        fmt.Println("Deployment creation FAILED in", ns_slice[ns], ":", err)
+    } else {
+        fmt.Println("Deployment creation SUCCESSFUL in", ns_slice[ns])
+    }
+}
