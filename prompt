@@ -1,15 +1,18 @@
-for ns := range ns_slice {
-    _, err := actions.CreateDeployment(
-        task_slice[i],
+if err != nil {
+    fmt.Println("Deployment creation FAILED in", ns_slice[ns], ":", err)
+
+    actions.Addnotes(
         session_token,
-        ns_slice[ns],
-        task_struct,
-        *clientset,
+        task_slice[i],
+        "Deployment creation FAILED in "+ns_slice[ns]+": "+err.Error(),
     )
 
-    if err != nil {
-        fmt.Println("Deployment creation FAILED in", ns_slice[ns], ":", err)
-    } else {
-        fmt.Println("Deployment creation SUCCESSFUL in", ns_slice[ns])
-    }
+} else {
+    fmt.Println("Deployment creation SUCCESSFUL in", ns_slice[ns])
+
+    actions.Addnotes(
+        session_token,
+        task_slice[i],
+        "Created deployment: "+task_struct.Name+" in namespace: "+ns_slice[ns],
+    )
 }
