@@ -1,18 +1,47 @@
-if err != nil {
-    fmt.Println("Deployment creation FAILED in", ns_slice[ns], ":", err)
+for ns := range ns_slice {
 
-    actions.Addnotes(
-        session_token,
-        task_slice[i],
-        "Deployment creation FAILED in "+ns_slice[ns]+": "+err.Error(),
+    deployExistFlag := utils.Check_deployments(
+        *clientset,
+        ns_slice[ns],
+        task_struct.Name,
     )
 
-} else {
-    fmt.Println("Deployment creation SUCCESSFUL in", ns_slice[ns])
+    if deployExistFlag == 1 {
 
-    actions.Addnotes(
-        session_token,
+        actions.Addnotes(
+            session_token,
+            task_slice[i],
+            "Deployment already exists: "+task_struct.Name+" in namespace: "+ns_slice[ns],
+        )
+
+        fmt.Println("Deployment already exists in", ns_slice[ns])
+        continue
+    }
+
+    _, err := actions.CreateDeployment(
         task_slice[i],
-        "Created deployment: "+task_struct.Name+" in namespace: "+ns_slice[ns],
+        session_token,
+        ns_slice[ns],
+        task_struct,
+        *clientset,
     )
+
+    if err != nil {
+        fmt.Println("Deployment creation FAILED in", ns_slice[ns], ":", err)
+
+        actions.Addnotes(
+            session_token,
+            task_slice[i],
+            "Deployment creation FAILED in "+ns_slice[ns]+": "+err.Error(),
+        )
+
+    } else {
+        fmt.Println("Deployment creation SUCCESSFUL in", ns_slice[ns])
+
+        actions.Addnotes(
+            session_token,
+            task_slice[i],
+            "Created deployment: "+task_struct.Name+" in namespace: "+ns_slice[ns],
+        )
+    }
 }
