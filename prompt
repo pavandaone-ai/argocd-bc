@@ -1,1 +1,1 @@
-actions.Change_task_status(session_token, task_slice[i], "2", "")
+fmt.Println("CTASK status update:", response.StatusCode)
