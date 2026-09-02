@@ -1,18 +1,5 @@
-if ns_counter == 0 {
-    actions.Addnotes(
-        session_token,
-        task_slice[i],
-        "The namespace prefix does not exist. Please consult with the PaaS Solutions team. Closing task.",
-    )
+Here’s a clean update you can send:
 
-    fmt.Println("The namespace prefix does not exist. Closing CTASK.")
+Good morning, we have made significant progress on the ServiceNow migration and the implementation is around 90–95% complete. We have successfully validated ServiceNow OAuth authentication, Change Request and CTASK retrieval, namespace-prefix handling, and deployment creation across unit, test, and stage. We also validated work-note updates, existing-deployment handling, namespace-not-found handling, and CTASK state transitions from Open → In Progress → Closed. The parent Change Request is also successfully moving from Scheduled → Implement.
 
-    actions.Change_task_status(
-        session_token,
-        task_slice[i],
-        "3",
-        "",
-    )
-
-    continue
-}
+The main item we are checking now is the final parent Change Request state after implementation. ServiceNow is currently moving the Change Request from Implement → Canceled automatically after the CTASK closes, even though our code is not explicitly setting the Change Request to Canceled. We are validating whether this is caused by a ServiceNow workflow/business rule and confirming the expected successful lifecycle, such as Implement → Review → Closed. Once that final state behavior is confirmed, we should be ready for full end-to-end validation and completion.
