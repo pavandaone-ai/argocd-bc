@@ -1,3 +1,1 @@
-if len(crq_slice) > 0 {
-    actions.Change_crq_status(session_token, crq_slice[0], "-1")
-}
+actions.Change_task_status(session_token, task_slice[i], "2", "")
