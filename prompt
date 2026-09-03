@@ -1,2 +1,10 @@
-oc get pod 
--o jsonpath='{range .spec.volumes[*]}{.name}{" => "}{.persistentVolumeClaim.claimName}{"\n"}{end}'
+Summary
+
+* Updated the application to use ServiceNow authentication and API configuration.
+* Preserved the existing OpenShift deployment workflow.
+* Prepared the changes to be built and validated from the main branch.
+
+Validation
+
+* Confirmed successful ServiceNow token retrieval.
+* Further build and endpoint validation will be performed from the main branch after merge.
