@@ -1,11 +1,2 @@
-if app_counter == ns_counter {
-    fmt.Println("All deployments handled successfully. Closing CTASK.")
-
-    actions.Change_task_status(session_token, task_slice[i], "3", "")
-
-    parentCRQ := actions.TaskParentMap[task_slice[i]]
-
-    fmt.Println("Closing parent Change Request:", parentCRQ)
-
-    actions.Change_crq_status(session_token, parentCRQ, "3")
-}
+oc get pod 
+-o jsonpath='{range .spec.volumes[*]}{.name}{" => "}{.persistentVolumeClaim.claimName}{"\n"}{end}'
