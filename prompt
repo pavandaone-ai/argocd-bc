@@ -1,10 +1,21 @@
-Summary
+requestBody := map[string]string{
+    "state": status,
+}
 
-* Updated the application to use ServiceNow authentication and API configuration.
-* Preserved the existing OpenShift deployment workflow.
-* Prepared the changes to be built and validated from the main branch.
+if status == "3" {
+    requestBody["close_code"] = reason
 
-Validation
+    if reason == "successful" {
+        requestBody["close_notes"] = "OpenShift deployment automation completed successfully."
+    } else if reason == "successful_issues" {
+        requestBody["close_notes"] = "OpenShift deployment automation completed with issues."
+    } else if reason == "unsuccessful" {
+        requestBody["close_notes"] = "OpenShift deployment automation was unsuccessful."
+    }
+}
 
-* Confirmed successful ServiceNow token retrieval.
-* Further build and endpoint validation will be performed from the main branch after merge.
+
+actions.Change_task_status(session_token, task_slice[i], "3", "successful")
+
+
+actions.Change_task_status(session_token, task_slice[i], "3", "successful_issues")
