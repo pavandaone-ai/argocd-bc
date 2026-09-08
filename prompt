@@ -1,21 +1,11 @@
-requestBody := map[string]string{
-    "state": status,
-}
+parentCRQ := actions.TaskParentMap[task_slice[i]]
 
-if status == "3" {
-    requestBody["close_code"] = reason
+fmt.Println("Canceling parent Change Request:", parentCRQ)
 
-    if reason == "successful" {
-        requestBody["close_notes"] = "OpenShift deployment automation completed successfully."
-    } else if reason == "successful_issues" {
-        requestBody["close_notes"] = "OpenShift deployment automation completed with issues."
-    } else if reason == "unsuccessful" {
-        requestBody["close_notes"] = "OpenShift deployment automation was unsuccessful."
-    }
-}
+actions.Change_crq_status(
 
+    session_token,
 
-actions.Change_task_status(session_token, task_slice[i], "3", "successful")
+    parentCRQ,
 
-
-actions.Change_task_status(session_token, task_slice[i], "3", "successful_issues")
+    "4",
