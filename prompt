@@ -1,9 +1,10 @@
-if status == "3" && reason == "successful" {
-    // keep existing one-call behavior
+requestBody := map[string]string{
+    "state": status,
 }
 
 if status == "3" && reason == "unsuccessful" {
-    // two-call behavior
-    // 1. closure information
-    // 2. state = 3
+    requestBody = map[string]string{
+        "close_code":  "unsuccessful",
+        "close_notes": "OpenShift deployment automation was unsuccessful.",
+    }
 }
