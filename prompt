@@ -1,40 +1,13 @@
-u := &url.URL{
-    Scheme: "https",
-    Host:   SERVICENOW_API_HOST,
-    Path:   "/api/now/table/change_task/" + task,
-}
-
-method := "PUT"
-
-requestBody := map[string]string{
-    "state": status,
-}
-
-bodyBytes, err := json.Marshal(requestBody)
-if err != nil {
-    panic(err)
-}
-
-request, err := http.NewRequest(
-    method,
-    u.String(),
-    bytes.NewBuffer(bodyBytes),
+actions.Update_task_closure(
+    session_token,
+    task_slice[i],
+    "unsuccessful",
+    "OpenShift deployment automation was unsuccessful.",
 )
-if err != nil {
-    panic(err)
-}
 
-request.Header.Add("Content-Type", "application/json")
-request.Header.Add("Accept", "application/json")
-request.Header.Add("Authorization", "Bearer "+string(token))
-
-client := &http.Client{}
-
-response, err := client.Do(request)
-if err != nil {
-    fmt.Println("Error:", err)
-    return
-}
-
-fmt.Println("CTASK status update:", response.StatusCode)
-response.Body.Close()
+actions.Change_task_status(
+    session_token,
+    task_slice[i],
+    "3",
+    "",
+)
