@@ -1,11 +1,9 @@
-parentCRQ := actions.TaskParentMap[task_slice[i]]
+if status == "3" && reason == "successful" {
+    // keep existing one-call behavior
+}
 
-fmt.Println("Canceling parent Change Request:", parentCRQ)
-
-actions.Change_crq_status(
-
-    session_token,
-
-    parentCRQ,
-
-    "4",
+if status == "3" && reason == "unsuccessful" {
+    // two-call behavior
+    // 1. closure information
+    // 2. state = 3
+}
