@@ -1,55 +1,15 @@
-requestBody := map[string]string{
-    "state": status,
+response, err := client.Do(closetask)
+if err != nil {
+    fmt.Println("Error:", err)
+    return
 }
 
-if status == "3" && reason == "successful" {
-    requestBody["close_code"] = "successful"
-    requestBody["close_notes"] = "OpenShift deployment automation completed successfully."
+responseBody, err := io.ReadAll(response.Body)
+if err != nil {
+    fmt.Println("Error reading CTASK response:", err)
 }
 
-if status == "3" && reason == "successful_issues" {
-    requestBody["close_code"] = "successful_issues"
-    requestBody["close_notes"] = "OpenShift deployment automation completed with issues."
-}
+fmt.Println("CTASK status update:", response.StatusCode)
+fmt.Println("CTASK API response:", string(responseBody))
 
-if status == "3" && reason == "unsuccessful" {
-    requestBody = map[string]string{
-        "close_code":  "unsuccessful",
-        "close_notes": "OpenShift deployment automation was unsuccessful.",
-    }
-}
-
-
-if status == "3" && reason == "unsuccessful" {
-
-    stateBody := map[string]string{
-        "state": "3",
-    }
-
-    stateBytes, err := json.Marshal(stateBody)
-    if err != nil {
-        panic(err)
-    }
-
-    stateRequest, err := http.NewRequest(
-        "PUT",
-        u.String(),
-        bytes.NewBuffer(stateBytes),
-    )
-    if err != nil {
-        panic(err)
-    }
-
-    stateRequest.Header.Add("Content-Type", "application/json")
-    stateRequest.Header.Add("Accept", "application/json")
-    stateRequest.Header.Add("Authorization", "Bearer "+string(token))
-
-    stateResponse, err := client.Do(stateRequest)
-    if err != nil {
-        fmt.Println("Error closing unsuccessful CTASK:", err)
-        return
-    }
-
-    fmt.Println("CTASK final close status:", stateResponse.StatusCode)
-    stateResponse.Body.Close()
-}
+response.Body.Close()
