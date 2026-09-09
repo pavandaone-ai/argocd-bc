@@ -1,42 +1,40 @@
-func Update_task_closure(token string, task string, closeCode string, closeNotes string) {
-
-    u := &url.URL{
-        Scheme: "https",
-        Host:   SERVICENOW_API_HOST,
-        Path:   "/api/now/table/change_task/" + task,
-    }
-
-    requestBody := map[string]string{
-        "close_code":  closeCode,
-        "close_notes": closeNotes,
-    }
-
-    bodyBytes, err := json.Marshal(requestBody)
-    if err != nil {
-        panic(err)
-    }
-
-    request, err := http.NewRequest(
-        "PUT",
-        u.String(),
-        bytes.NewBuffer(bodyBytes),
-    )
-    if err != nil {
-        panic(err)
-    }
-
-    request.Header.Add("Content-Type", "application/json")
-    request.Header.Add("Accept", "application/json")
-    request.Header.Add("Authorization", "Bearer "+string(token))
-
-    client := &http.Client{}
-
-    response, err := client.Do(request)
-    if err != nil {
-        fmt.Println("Error updating CTASK closure information:", err)
-        return
-    }
-    defer response.Body.Close()
-
-    fmt.Println("CTASK closure information update:", response.StatusCode)
+u := &url.URL{
+    Scheme: "https",
+    Host:   SERVICENOW_API_HOST,
+    Path:   "/api/now/table/change_task/" + task,
 }
+
+method := "PUT"
+
+requestBody := map[string]string{
+    "state": status,
+}
+
+bodyBytes, err := json.Marshal(requestBody)
+if err != nil {
+    panic(err)
+}
+
+request, err := http.NewRequest(
+    method,
+    u.String(),
+    bytes.NewBuffer(bodyBytes),
+)
+if err != nil {
+    panic(err)
+}
+
+request.Header.Add("Content-Type", "application/json")
+request.Header.Add("Accept", "application/json")
+request.Header.Add("Authorization", "Bearer "+string(token))
+
+client := &http.Client{}
+
+response, err := client.Do(request)
+if err != nil {
+    fmt.Println("Error:", err)
+    return
+}
+
+fmt.Println("CTASK status update:", response.StatusCode)
+response.Body.Close()
