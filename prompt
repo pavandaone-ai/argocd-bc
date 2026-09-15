@@ -1,1 +1,6 @@
-I completed the Loki setup in the cluster. I installed the Loki Operator, deployed the LokiStack, and configured the ClusterLogForwarder. All components are healthy, and I successfully validated application, infrastructure, and audit logs through Observe → Logs. The base logging setup is complete. Before I close the ticket, could you please confirm whether there are any additional organization-specific configurations or validations required, including whether CrowdStrike forwarding is part of this ticket’s scope?
+oc get nodes -o json | jq '
+  [ .items[].status.capacity.cpu | tonumber ] | add as $cpu |
+  [ .items[].status.capacity.memory
+    | sub("Ki$";"") | tonumber ] | add / 1024 / 1024 as $mem |
+  "Total CPU: \($cpu) cores\nTotal Memory: \($mem | floor) GiB"
+'
