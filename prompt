@@ -1,6 +1,6 @@
 oc get nodes -o json | jq '
-  [ .items[].status.capacity.cpu | tonumber ] | add as $cpu |
-  [ .items[].status.capacity.memory
-    | sub("Ki$";"") | tonumber ] | add / 1024 / 1024 as $mem |
-  "Total CPU: \($cpu) cores\nTotal Memory: \($mem | floor) GiB"
+. as $r |
+([$r.items[].status.capacity.cpu | tonumber] | add) as $cpu |
+([$r.items[].status.capacity.memory | sub("Ki$";"") | tonumber] | add / 1024 / 1024) as $mem |
+"Total CPU: \($cpu) cores\nTotal Memory: \($mem | floor) GiB"
 '
