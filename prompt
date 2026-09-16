@@ -1,6 +1,1 @@
-oc get nodes -o json | jq '
-. as $r |
-([$r.items[].status.capacity.cpu | tonumber] | add) as $cpu |
-([$r.items[].status.capacity.memory | sub("Ki$";"") | tonumber] | add / 1024 / 1024) as $mem |
-"Total CPU: \($cpu) cores\nTotal Memory: \($mem | floor) GiB"
-'
+node -e "const n=require('net'); const s=n.createConnection({host:process.env.MSSQL_DBSERVER,port:Number(process.env.MSSQL_DBPORT)},()=>{console.log('CONNECTED TO SQL');s.end()});s.on('error',e=>console.error('FAILED:',e.message));s.setTimeout(5000,()=>{console.error('TIMEOUT');s.destroy()})"
