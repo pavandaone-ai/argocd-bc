@@ -1,7 +1,4 @@
-Just giving an update on the issue we are seeing from Sunday. The service is not able to process the new Remedy requests, and the pods are failing the health checks with msnodesqlv8 module errors and going into CrashLoopBackOff.
+oc get pvc storage-logging-loki-compactor-0 -n openshift-logging \
+  -o jsonpath='{.spec.storageClassName}{"\n"}'
 
-I checked the Jenkins build and msnodesqlv8@5.3.0 is downloading and installing successfully from Artifactory. I also compared the old working build with the new build. The old build installed 137 packages and bundled 1105 modules, and it generated the required sqlserver-*.node file. The new build installed 190 packages and bundled 1486 modules, but the sqlserver-*.node file is not getting generated in the final build output.
-
-I also tested the connectivity from the Prod pod to SQL Server and it is connecting successfully, so I don’t see any basic connectivity issue from OpenShift to SQL. The same application/build issue is happening in the lower environment as well.
-
-I asked the Dev team to schedule a call tomorrow morning so we can compare the old and new builds further and find what changed.
+oc get storageclass isilon -o custom-columns=NAME:.metadata.name,PROVISIONER:.provisioner
