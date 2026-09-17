@@ -1,4 +1,1 @@
-oc get pvc storage-logging-loki-compactor-0 -n openshift-logging \
-  -o jsonpath='{.spec.storageClassName}{"\n"}'
-
-oc get storageclass isilon -o custom-columns=NAME:.metadata.name,PROVISIONER:.provisioner
+We are adding new worker nodes to our OpenShift Dev and Prod clusters. Could you please reserve available IP addresses from the respective subnets and create the required DNS records for the FQDNs listed below?
