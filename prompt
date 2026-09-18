@@ -1,1 +1,8 @@
-du -sh .[!.]* * 2>/dev/null | sort -hr
+oc adm policy add-cluster-role-to-user collect-application-logs \
+system:serviceaccount:openshift-logging:logging-collector
+
+oc adm policy add-cluster-role-to-user collect-infrastructure-logs \
+system:serviceaccount:openshift-logging:logging-collector
+
+oc adm policy add-cluster-role-to-user collect-audit-logs \
+system:serviceaccount:openshift-logging:logging-collector
