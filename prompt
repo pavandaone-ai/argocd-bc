@@ -6,3 +6,9 @@ system:serviceaccount:openshift-logging:logging-collector
 
 oc adm policy add-cluster-role-to-user collect-audit-logs \
 system:serviceaccount:openshift-logging:logging-collector
+
+
+
+oc adm policy add-cluster-role-to-user logging-collector-logs-writer \
+-z logging-collector \
+-n openshift-logging
