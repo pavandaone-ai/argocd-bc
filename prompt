@@ -1,1 +1,2 @@
-jsonpath='{.metadata.resourceVersion}{"\n"}'
+oc get jobs  \
+-o custom-columns='NAME:.metadata.name,CREATED:.metadata.creationTimestamp,SCHEDULED:.metadata.annotations.batch\.kubernetes\.io/cronjob-scheduled-timestamp,SUCCEEDED:.status.succeeded'
