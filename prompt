@@ -1,23 +1,7 @@
-Intermittent HTTP 502 / ICAP error through proxy when connecting to ServiceNow API
-
-We are seeing intermittent connectivity failures from an OpenShift application when connecting to the ServiceNow API through the corporate proxy.
-
-Target endpoint: .servicenowservices.com/oauth_token.do
-
-The application uses the configured corporate proxy on port 8080.
-
-Some requests are successful and return HTTP 200, but other requests with the same configuration intermittently return HTTP 502.
-
-During the failure, the response is coming back as an ICAP error:
+oc get cronjob  \
+-o jsonpath='{.spec.jobTemplate.spec.template.spec.containers[0].image}{"\n"}'
 
 
+oc get job 
 
-Because the request fails at this point, the ServiceNow OAuth request does not return an access token and the application cannot continue.
-
-We have confirmed that successful and failed requests are using the same OpenShift environment, application image, ServiceNow endpoint, credentials configuration, and proxy configuration. The issue is intermittent — the same request can return HTTP 200 and later return HTTP 502.
-
-please review the proxy/ICAP logs and investigate why requests to the ServiceNow endpoint are intermittently failing with HTTP 502 / ICAP internal error?
-
-For Business Impact, put:
-
-This application automates processing of ServiceNow change requests and change tasks for OpenShift deployments. When the proxy/ICAP request fails, ServiceNow authentication cannot complete and the automated processing is interrupted.
+-o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
