@@ -5,3 +5,8 @@ oc get cronjob  \
 oc get job 
 
 -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+
+
+
+oc get  -o json | \
+jq '.metadata.managedFields[] | {manager, operation, time}'
