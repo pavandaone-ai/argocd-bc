@@ -1,12 +1,3 @@
 oc get cronjob  \
--o jsonpath='{.spec.jobTemplate.spec.template.spec.containers[0].image}{"\n"}'
-
-
-oc get job 
-
--o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
-
-
-
-oc get  -o json | \
-jq '.metadata.managedFields[] | {manager, operation, time}'
+-o jsonpath='{.metadata.annotations.kubectl\.kubernetes\.io/last-applied-configuration}' | \
+grep -o 'quay[^"]*myit-ose-api:[^"]*'
