@@ -1,3 +1,45 @@
-oc get cronjob  \
--o jsonpath='{.metadata.annotations.kubectl\.kubernetes\.io/last-applied-configuration}' | \
-grep -o 'quay[^"]*myit-ose-api:[^"]*'
+Since this is for the Production Central RHACS Operator patch upgrade from 4.11.x to 4.11.4, before upgrading the secured clusters to 4.11.4, you can use the following in your change ticket.
+
+Description
+
+Upgrade the RHACS Operator and Central services in the Production Central cluster from the current 4.11 release to 4.11.4. This will ensure Central is on the required/latest patch level before upgrading the associated secured clusters to RHACS 4.11.4.
+
+Justification
+
+Central should be upgraded before the secured clusters to maintain the proper RHACS upgrade sequence and version compatibility. This change prepares the environment for the subsequent secured-cluster upgrades to 4.11.4.
+
+Implementation Plan
+
+1. Verify all RHACS Central components are healthy and running before the change.
+2. Confirm the current RHACS Operator/Central version and cluster health.
+3. Take a Central backup and verify the backup completes successfully.
+4. Verify sufficient resources/storage and confirm there are no existing critical RHACS alerts or pod failures.
+5. Update the RHACS Operator subscription to the appropriate 4.11.4 release/update.
+6. Monitor the Operator upgrade and Central component rollout.
+7. Verify all Central pods return to Running/Ready.
+8. Confirm Central reports RHACS 4.11.4.
+9. Validate Central UI access and secured-cluster connectivity.
+
+Test Plan
+
+After the upgrade, verify that all RHACS Central pods are Running/Ready with no unexpected restarts or errors. Confirm the Central UI is accessible, Central reports version 4.11.4, secured clusters remain connected/healthy, and RHACS functionality is operating normally.
+
+Backup Plan
+
+Take a complete RHACS Central backup prior to the upgrade using the approved roxctl central backup procedure. Verify that the backup file is successfully generated and retained before beginning the Operator upgrade.
+
+Backout / Rollback Plan
+
+If the upgrade fails or Central services do not become healthy, stop further secured-cluster upgrades and troubleshoot the Operator/Central deployment. Use the approved Red Hat RHACS recovery/restore procedure and the pre-change Central backup if restoration is required. Engage Red Hat Support if rollback/recovery cannot be completed safely.
+
+Risk and Impact Analysis
+
+The change is a patch-level RHACS upgrade and is expected to have low to moderate risk. Central components may restart during the upgrade, which could temporarily affect RHACS UI access, alert processing, and communication with secured clusters. Application workloads running on the protected OpenShift clusters are not expected to be interrupted.
+
+Work Notes / Planning
+
+Reviewed the RHACS Production Central environment and planned the 4.11.4 patch upgrade prior to upgrading the secured clusters. Pre-checks, Central backup, Operator/Central upgrade, pod-health validation, UI validation, and secured-cluster connectivity checks will be performed during the approved change window.
+
+Business Justification
+
+Maintaining RHACS Central at the current supported patch level improves platform stability and ensures compatibility with secured clusters being upgraded to 4.11.4. Completing the Central upgrade first follows the required upgrade sequence and reduces compatibility risk during subsequent secured-cluster upgrades.
