@@ -46,3 +46,64 @@ Maintaining RHACS Central at the current supported patch level improves platform
 
 
 Upgrade the RHACS Operator and Central services in the Production Central cluster from the current 4.11 version to 4.11.4. Perform pre-upgrade health checks and Central backup, complete the upgrade, and validate Central pods, UI access, and secured-cluster connectivity after the upgrade.
+
+
+
+
+
+Short Description
+
+Onboard New OpenShift Secured Cluster to RHACS Central
+
+Description
+
+Onboard the new OpenShift cluster as an RHACS Secured Cluster and establish connectivity with the existing Production RHACS Central. The change includes installing/configuring the RHACS Secured Cluster services, applying the required init bundle/configuration, and validating communication with Central.
+
+Justification
+
+The new OpenShift cluster must be onboarded to RHACS Central to enable centralized security monitoring, vulnerability management, policy enforcement, and visibility of cluster workloads.
+
+Implementation Plan
+
+1. Verify the new OpenShift cluster is healthy and accessible.
+2. Verify connectivity and required network communication between the new cluster and RHACS Central.
+3. Verify/install the RHACS Operator on the new cluster.
+4. Generate/download the required init bundle from Central for the new secured cluster.
+5. Apply the required init bundle secrets to the new cluster.
+6. Create/configure the SecuredCluster resource with the appropriate Central endpoint and environment settings.
+7. Monitor deployment of RHACS components such as Sensor, Collector, Admission Control, and Scanner components, as applicable.
+8. Verify all RHACS secured-cluster pods become Running/Ready.
+9. Confirm the new cluster appears in RHACS Central and reports a healthy connection.
+10. Perform post-onboarding validation and monitor for errors.
+
+Test Plan
+
+Verify all RHACS secured-cluster components are Running/Ready with no unexpected errors or restarts. Confirm the new cluster appears as Healthy/Connected in Central and validate Sensor, Collector, Admission Control, and applicable Scanner functionality.
+
+Backup Plan
+
+No application data or existing workloads are expected to be modified as part of the onboarding. Capture the existing cluster/RHACS configuration before implementation and retain the generated RHACS onboarding configuration/init bundle according to the approved process.
+
+Backout / Rollback Plan
+
+If onboarding fails or causes unexpected issues, remove the newly created SecuredCluster configuration and RHACS secured-cluster resources using the approved RHACS removal procedure. Validate that existing application workloads remain operational and troubleshoot connectivity/configuration before attempting onboarding again.
+
+Risk and Impact Analysis
+
+This is expected to be a low-risk change. RHACS security components will be deployed to the new OpenShift cluster and will consume cluster resources. No application outage is expected. Incorrect configuration or connectivity issues could prevent the cluster from successfully communicating with Central.
+
+Work Notes / Planning
+
+Reviewed the requirements for onboarding the new OpenShift cluster to the existing RHACS Central. The implementation will include RHACS Operator/configuration validation, init bundle configuration, SecuredCluster deployment, pod-health verification, and Central connectivity validation.
+
+Business Justification
+
+Onboarding the new cluster to RHACS Central provides centralized security visibility and enables consistent RHACS security monitoring and policy management across the OpenShift environment.
+
+Implementation CTask
+
+Short Description:
+Onboard New OpenShift Secured Cluster to RHACS Central
+
+Description:
+Configure and onboard the new OpenShift cluster as an RHACS Secured Cluster and connect it to the existing Central. Deploy the required RHACS secured-cluster components and validate pod health and successful connectivity to Central after implementation.
