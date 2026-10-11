@@ -1,3 +1,5 @@
 oc get pvc scanner-v4-db -n stackrox -o jsonpath='{.spec.resources.requests.storage}{"  capacity="}{.status.capacity.storage}{"\n"}'
 
 oc get central stackrox-central-services -n stackrox -o yaml | grep -A15 -i scanner
+
+oc get central stackrox-central-services -n stackrox -o yaml | grep -B5 -A15 "size: 100Gi"
