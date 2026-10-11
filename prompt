@@ -3,3 +3,10 @@ oc get pvc scanner-v4-db -n stackrox -o jsonpath='{.spec.resources.requests.stor
 oc get central stackrox-central-services -n stackrox -o yaml | grep -A15 -i scanner
 
 oc get central stackrox-central-services -n stackrox -o yaml | grep -B5 -A15 "size: 100Gi"
+
+
+oc patch central stackrox-central-services -n stackrox \
+
+  --type=merge \
+
+  -p '{"spec":{"scannerV4":{"db":{"persistence":{"persistentVolumeClaim":{"size":"150Gi"}}}}}}'
