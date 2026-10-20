@@ -1,12 +1,7 @@
-oc get pvc scanner-v4-db -n stackrox -o jsonpath='{.spec.resources.requests.storage}{"  capacity="}{.status.capacity.storage}{"\n"}'
+**MCP Development – Progress Update**
 
-oc get central stackrox-central-services -n stackrox -o yaml | grep -A15 -i scanner
+1. Reviewed the existing MCP architecture and `server.go` implementation to understand MCP server initialization, tool registration, and HTTP/HTTPS communication.
 
-oc get central stackrox-central-services -n stackrox -o yaml | grep -B5 -A15 "size: 100Gi"
+2. Reviewed `k8sConnect.go` to understand Kubernetes/OpenShift connectivity, including local kubeconfig-based authentication and in-cluster service account configuration.
 
-
-oc patch central stackrox-central-services -n stackrox \
-
-  --type=merge \
-
-  -p '{"spec":{"scannerV4":{"db":{"persistence":{"persistentVolumeClaim":{"size":"150Gi"}}}}}}'
+3. Currently identifying gaps and potential improvements in authentication, authorization, configuration validation, error handling, and security controls before proceeding with implementation and testing.
