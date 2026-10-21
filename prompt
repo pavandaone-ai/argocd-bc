@@ -1,7 +1,2 @@
-**MCP Development – Progress Update**
-
-1. Reviewed the existing MCP architecture and `server.go` implementation to understand MCP server initialization, tool registration, and HTTP/HTTPS communication.
-
-2. Reviewed `k8sConnect.go` to understand Kubernetes/OpenShift connectivity, including local kubeconfig-based authentication and in-cluster service account configuration.
-
-3. Currently identifying gaps and potential improvements in authentication, authorization, configuration validation, error handling, and security controls before proceeding with implementation and testing.
+oc get nodes -l node-role.kubernetes.io/infra \
+-o custom-columns='NAME:.metadata.name,STATE:.metadata.annotations.machineconfiguration\.openshift\.io/state,CURRENT:.metadata.annotations.machineconfiguration\.openshift\.io/currentConfig,DESIRED:.metadata.annotations.machineconfiguration\.openshift\.io/desiredConfig,UNSCHEDULABLE:.spec.unschedulable'
