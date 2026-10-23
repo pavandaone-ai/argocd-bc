@@ -1,2 +1,1 @@
-oc get nodes -l node-role.kubernetes.io/infra \
--o custom-columns='NAME:.metadata.name,STATE:.metadata.annotations.machineconfiguration\.openshift\.io/state,CURRENT:.metadata.annotations.machineconfiguration\.openshift\.io/currentConfig,DESIRED:.metadata.annotations.machineconfiguration\.openshift\.io/desiredConfig,UNSCHEDULABLE:.spec.unschedulable'
+oc get pods -A -o custom-columns='NAMESPACE:.metadata.namespace,POD:.metadata.name,IMAGES:.spec.containers[*].image' | grep -i 'php-80-ubi9'
