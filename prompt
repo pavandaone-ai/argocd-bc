@@ -1,1 +1,5 @@
-export KUBECONFIG="$HOME/oc-mcp-sandbox-config"
+export ENV="local"
+export HOSTNAME="localhost"
+export PORT="8001"
+export PROTOCOL="http"
+export KUBECONFIG_PATH="$KUBECONFIG"
