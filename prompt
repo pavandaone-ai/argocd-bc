@@ -1,15 +1,3 @@
-oc get pods -A -o custom-columns='NAMESPACE:.metadata.namespace,POD:.metadata.name,IMAGES:.spec.containers[*].image' | grep -i 'php-80-ubi9'
-
-
-Hi Team,
-We are moving a secured OpenShift cluster to a new ACS Central. After applying the new TLS secrets and updating the Central endpoint, Sensor logs show “connection refused.”
-Could you verify whether an existing firewall rule allows the following connection and check for any denies or rejects?
-- Source cluster name: x
-- Source node hostname: x
-- Source node IP: x
-- Sensor pod IP: x
-- Destination Central hostname: x
-- Destination Central VIP/IP: x
-- Destination TCP port: x
-- Direction: Secured cluster → ACS Central
-- Failure timestamp and timezone: x
+export PATH="$HOME:$PATH"
+hash -r
+oc version --client
