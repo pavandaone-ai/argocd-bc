@@ -1,1 +1,1 @@
-alias oc='/c/Users/n5bp/oc.exe'
+export KUBECONFIG="$HOME/oc-mcp-sandbox-config"
