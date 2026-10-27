@@ -3,3 +3,11 @@ export HOSTNAME="localhost"
 export PORT="8001"
 export PROTOCOL="http"
 export KUBECONFIG_PATH="$KUBECONFIG"
+
+
+export ENV="local"
+export MCP_SERVER_URL="http://localhost:8001"
+export MCP_CLIENT_HOST="localhost"
+export MCP_CLIENT_PORT="8000"
+export MCP_CLIENT_PROTOCOL="http"
+export ROUTE_URL="http://localhost:8000"
