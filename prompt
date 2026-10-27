@@ -1,3 +1,6 @@
 if err := json.Unmarshal(body, &chatResp); err != nil {
     log.Printf("LLM response JSON parsing error: %v", err)
 }
+
+
+log.Printf("LLM Content-Type: %s", resp.Header.Get("Content-Type"))
