@@ -1,4 +1,3 @@
-log.Printf("LLM choices: %d", len(chatResp.Choices))
-if len(chatResp.Choices) > 0 {
-    log.Printf("LLM tool calls: %d", len(chatResp.Choices[0].Message.ToolCalls))
+if err := json.Unmarshal(body, &chatResp); err != nil {
+    log.Printf("LLM response JSON parsing error: %v", err)
 }
