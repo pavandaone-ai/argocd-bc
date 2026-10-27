@@ -1,1 +1,4 @@
-log.Printf("LLM HTTP status: %d", resp.StatusCode)
+log.Printf("LLM choices: %d", len(chatResp.Choices))
+if len(chatResp.Choices) > 0 {
+    log.Printf("LLM tool calls: %d", len(chatResp.Choices[0].Message.ToolCalls))
+}
