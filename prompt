@@ -4,3 +4,7 @@ if err := json.Unmarshal(body, &chatResp); err != nil {
 
 
 log.Printf("LLM Content-Type: %s", resp.Header.Get("Content-Type"))
+
+
+log.Printf("LLM final response host: %s", resp.Request.URL.Host)
+log.Printf("LLM redirects followed: %t", resp.Request.URL.String() != LLM_URL)
