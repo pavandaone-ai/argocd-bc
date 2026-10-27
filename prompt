@@ -1,4 +1,1 @@
-grep -RniE 'LLM_USER|LLM_PASS|LLM_URL' ../README.md ../client-cfg ../cfg
-
-
-read -rs -p "Enter API_PW: " LLM_PASS; echo; export LLM_PASS
+log.Printf("LLM HTTP status: %d", resp.StatusCode)
