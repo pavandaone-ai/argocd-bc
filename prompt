@@ -1,10 +1,3 @@
-if err := json.Unmarshal(body, &chatResp); err != nil {
-    log.Printf("LLM response JSON parsing error: %v", err)
-}
+I've completed the local setup of the OpenShift Tasks MCP client and server, and confirmed successful connectivity and tool discovery.
 
-
-log.Printf("LLM Content-Type: %s", resp.Header.Get("Content-Type"))
-
-
-log.Printf("LLM final response host: %s", resp.Request.URL.Host)
-log.Printf("LLM redirects followed: %t", resp.Request.URL.String() != LLM_URL)
+I'm now working on configuring and validating OpenShift authentication using kubeconfig. I also identified an LLM API authentication redirect issue that needs to be resolved before end-to-end testing.
