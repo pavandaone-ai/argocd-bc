@@ -1,1 +1,2 @@
 if [ -n "$LLM_USER" ] && [ -n "$LLM_PASS" ]; then echo "LLM credentials configured"; else echo "LLM credentials missing"; fi
+[ "$LLM_USER" = "$API_UN" ] && echo "Username matches" || echo "Username does not match"
