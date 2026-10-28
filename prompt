@@ -2,3 +2,4 @@ if [ -n "$LLM_USER" ] && [ -n "$LLM_PASS" ]; then echo "LLM credentials configur
 [ "$LLM_USER" = "$API_UN" ] && echo "Username matches" || echo "Username does not match"
 [ -n "$API_PW" ] && [ "$LLM_PASS" = "$API_PW" ] && echo "Password matches" || echo "Password missing or does not match"
 curl -s -o /dev/null -D - -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" "$LLM_URL"
+oc get configmap   -o jsonpath='{.data.}' | wc -c
