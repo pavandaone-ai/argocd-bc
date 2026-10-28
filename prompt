@@ -1,3 +1,1 @@
-I've completed the local setup of the OpenShift Tasks MCP client and server, and confirmed successful connectivity and tool discovery.
-
-I'm now working on configuring and validating OpenShift authentication using kubeconfig. I also identified an LLM API authentication redirect issue that needs to be resolved before end-to-end testing.
+if [ -n "$LLM_USER" ] && [ -n "$LLM_PASS" ]; then echo "LLM credentials configured"; else echo "LLM credentials missing"; fi
