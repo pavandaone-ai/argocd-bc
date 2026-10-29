@@ -7,3 +7,4 @@ go-template='{{range $key, $value := .data}}{{printf "%s\n" $key}}{{end}}'
 
 
 [ -n "$LLM_USER" ] && [ -n "$LLM_PASS" ] && echo "Credentials configured" || echo "Credentials missing"
+oc get secret  -o go-template='{{if index .data ""}}Password key exists{{else}}Password key missing{{end}}{{"\n"}}'
