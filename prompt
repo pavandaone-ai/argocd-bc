@@ -4,3 +4,6 @@ if [ -n "$LLM_USER" ] && [ -n "$LLM_PASS" ]; then echo "LLM credentials configur
 curl -s -o /dev/null -D - -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" "$LLM_URL"
 oc get configmap   -o jsonpath='{.data.}' | wc -c
 go-template='{{range $key, $value := .data}}{{printf "%s\n" $key}}{{end}}'
+
+
+[ -n "$LLM_USER" ] && [ -n "$LLM_PASS" ] && echo "Credentials configured" || echo "Credentials missing"
