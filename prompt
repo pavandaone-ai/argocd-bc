@@ -10,3 +10,7 @@ go-template='{{range $key, $value := .data}}{{printf "%s\n" $key}}{{end}}'
 oc get secret  -o go-template='{{if index .data ""}}Password key exists{{else}}Password key missing{{end}}{{"\n"}}'
 
 KUBECONFIG="$KUBECONFIG_PATH" oc get deployments 
+
+export ENV=local
+export KUBECONFIG_PATH=""
+echo "KUBECONFIG_PATH=[$KUBECONFIG_PATH]"
