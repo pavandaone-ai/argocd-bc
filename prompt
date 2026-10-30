@@ -20,3 +20,4 @@ oc --kubeconfig="$KUBECONFIG_PATH" whoami
 
 mkdir -p "$HOME/mcp-backups"
 export BACKUPS_FOLDER_PATH="$HOME/mcp-backups"
+echo "BACKUPS_FOLDER_PATH=[$BACKUPS_FOLDER_PATH]"
