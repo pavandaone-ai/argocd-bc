@@ -14,3 +14,5 @@ KUBECONFIG="$KUBECONFIG_PATH" oc get deployments
 export ENV=local
 export KUBECONFIG_PATH=""
 echo "KUBECONFIG_PATH=[$KUBECONFIG_PATH]"
+
+oc --kubeconfig="$KUBECONFIG_PATH" whoami
