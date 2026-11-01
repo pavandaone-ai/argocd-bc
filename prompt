@@ -3,8 +3,8 @@ if [ -n "$LLM_USER" ] && [ -n "$LLM_PASS" ]; then echo "LLM credentials configur
 [ -n "$API_PW" ] && [ "$LLM_PASS" = "$API_PW" ] && echo "Password matches" || echo "Password missing or does not match"
 curl -s -o /dev/null -D - -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" "$LLM_URL"
 curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" "$LLM_URL"
-curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" -X POST "$LLM_URL" \
--d '{"model":"meta-llama/Llama-4-Scout-17B-16E-Instruct","messages":[{"role":"user","content":"Hello"}]}'
+curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" -X POST "$LLM_URL" -d '{"model":"meta-llama/Llama-4-Scout-17B-16E-Instruct","messages":[{"role":"user","content":"Hello"}]}'
+curl -sS -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" -X POST "$LLM_URL" -d '{"model":"meta-llama/Llama-4-Scout-17B-16E-Instruct","messages":[{"role":"user","content":"Hello"}]}'
 oc get configmap   -o jsonpath='{.data.}' | wc -c
 go-template='{{range $key, $value := .data}}{{printf "%s\n" $key}}{{end}}'
 
