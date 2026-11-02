@@ -29,3 +29,12 @@ echo "BACKUPS_FOLDER_PATH=[$BACKUPS_FOLDER_PATH]"
 
 
 curl -sS -D - -o /dev/null -u "$LLM_USER:$LLM_PASS" -H "Content-Type: application/json" -d '{"model":"meta-llama/Llama-4-Scout-17B-16E-Instruct","messages":[{"role":"user","content":"Hello"}]}' "$LLM_URL"
+
+
+grep -RniE '|LLM_URL|API_UN|API_PW' \
+  --include='*.go' \
+  --include='*.yaml' \
+  --include='*.yml' \
+  --include='*.md' \
+  --include='*.json' \
+  .
