@@ -38,3 +38,7 @@ grep -RniE '|LLM_URL|API_UN|API_PW' \
   --include='*.md' \
   --include='*.json' \
   .
+
+
+grep -nE 'AddTool|RegisterTool|HandleTool|tools\.' server/server.go
+
