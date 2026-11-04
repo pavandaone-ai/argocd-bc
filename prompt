@@ -1,16 +1,96 @@
 
-clusters:
-  - id: sandbox
-    name: "Sandbox"
-    description: "OpenShift Sandbox Cluster"
-    enabled: true
+package main
 
-  - id: dev-shared
-    name: "Dev Shared"
-    description: "OpenShift Development Shared Cluster"
-    enabled: true
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 
-  - id: production
-    name: "Production"
-    description: "OpenShift Production Cluster"
-    enabled: true
+	"gopkg.in/yaml.v3"
+)
+
+type Cluster struct {
+	ID          string `yaml:"id" json:"id"`
+	Name        string `yaml:"name" json:"name"`
+	Description string `yaml:"description" json:"description"`
+	Enabled     bool   `yaml:"enabled" json:"enabled"`
+}
+
+type ClusterConfig struct {
+	Clusters []Cluster `yaml:"clusters"`
+}
+
+func loadClusters() ([]Cluster, error) {
+	path := os.Getenv("CLUSTERS_CONFIG_PATH")
+	if path == "" {
+		path = "config/clusters.yaml"
+	}
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var config ClusterConfig
+	if err := yaml.Unmarshal(data, &config); err != nil {
+		return nil, err
+	}
+
+	var enabled []Cluster
+	for _, cluster := range config.Clusters {
+		if cluster.Enabled {
+			enabled = append(enabled, cluster)
+		}
+	}
+
+	return enabled, nil
+}
+
+func main() {
+	clusters, err := loadClusters()
+	if err != nil {
+		log.Fatalf("Failed to load clusters: %v", err)
+	}
+
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/api/clusters", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Cache-Control", "no-store")
+		if err := json.NewEncoder(w).Encode(clusters); err != nil {
+			log.Printf("Failed to encode clusters: %v", err)
+		}
+	})
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
+		http.ServeFile(w, r, "client/index.html")
+	})
+
+	port := strings.TrimSpace(os.Getenv("PORT"))
+	if port == "" {
+		port = "8080"
+	}
+
+	server := &http.Server{
+		Addr:              ":" + port,
+		Handler:           mux,
+		ReadHeaderTimeout: 10 * time.Second,
+	}
+
+	log.Printf("BCBSFL Platform Chatbot running on http://localhost:%s", port)
+	log.Printf("Loaded %d available clusters", len(clusters))
+
+	log.Fatal(server.ListenAndServe())
+}
