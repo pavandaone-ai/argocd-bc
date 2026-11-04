@@ -89,7 +89,7 @@ func main() {
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
-	log.Printf("BCBSFL Platform Chatbot running on http://localhost:%s", port)
+	log.Printf(" Platform Chatbot running on http://localhost:%s", port)
 	log.Printf("Loaded %d available clusters", len(clusters))
 
 	log.Fatal(server.ListenAndServe())
