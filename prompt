@@ -1,1 +1,16 @@
-grep -RniE "GetK8SConfig|InClusterConfig|BuildConfigFromFlags|NewForConfig" server --include="*.go"
+
+clusters:
+  - id: sandbox
+    name: "Sandbox"
+    description: "OpenShift Sandbox Cluster"
+    enabled: true
+
+  - id: dev-shared
+    name: "Dev Shared"
+    description: "OpenShift Development Shared Cluster"
+    enabled: true
+
+  - id: production
+    name: "Production"
+    description: "OpenShift Production Cluster"
+    enabled: true
