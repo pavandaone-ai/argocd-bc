@@ -1,7 +1,17 @@
-Working on the OpenShift MCP-based Platform Chatbot POC to enable cluster operations through a conversational interface.
+Ticket Title: Design and Implement OpenShift MCP-Based Platform Chatbot
 
-- Developed the initial chatbot UI with multi-cluster discovery functionality.
-- Created a dedicated namespace in the sandbox OpenShift cluster for deployment and testing.
-- Reviewed the existing OpenShift OAuth/LDAP configuration for secure user authentication and RBAC-based access.
-- Currently reviewing the Dockerfile and Jenkins pipeline to containerize and deploy the chatbot using internal registries.
-- Next steps include implementing cluster authentication, MCP integration, and testing read-only operations before enabling restart/delete functionality.
+Description / Implementation Tasks:
+
+Design the MCP-based chatbot architecture integrating the UI, LLM, MCP client/server, and OpenShift API.
+
+Develop a chatbot interface with multi-cluster discovery and selection capabilities.
+
+Integrate OpenShift OAuth/LDAP authentication and RBAC-based user authorization.
+
+Develop MCP tools for listing namespaces, pods, deployments, services, and routes.
+
+Implement secure deployment restart and deletion operations with permission checks and audit logging.
+
+Containerize the application and configure Jenkins CI/CD pipelines using internal registries.
+
+Deploy to OpenShift using Deployments, Services, Routes, ConfigMaps, and Secrets, followed by end-to-end testing.
