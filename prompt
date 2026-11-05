@@ -1,220 +1,36 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Platform Chatbot</title>
-  <style>
-    :root {
-      font-family: Inter, Arial, sans-serif;
-      color: #e8edf7;
-      background: #0b1220;
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; }
-    .app { display: flex; min-height: 100vh; }
-    aside {
-      width: 250px; padding: 24px;
-      background: #111b2e;
-      border-right: 1px solid #263449;
-    }
-    .brand { font-size: 19px; font-weight: 700; }
-    .muted { color: #9aabc4; font-size: 13px; }
-    .sidebar-title { margin-top: 40px; font-size: 12px; text-transform: uppercase; color: #9aabc4; }
-    .cluster-nav { margin-top: 14px; display: grid; gap: 10px; }
-    .cluster-nav button {
-      text-align: left; background: #19263c;
-      color: #e8edf7; border: 1px solid #33445e;
-      border-radius: 10px; padding: 12px; cursor: pointer;
-    }
-    .cluster-nav button:hover { border-color: #69a7ff; }
-    main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 28px; border-bottom: 1px solid #263449;
-    }
-    .status { color: #f0bd69; font-size: 13px; }
-    .chat { flex: 1; overflow-y: auto; padding: 32px; max-height: calc(100vh - 160px); }
-    .message {
-      max-width: 740px; margin: 0 auto 18px;
-      padding: 16px 20px; border-radius: 14px; line-height: 1.6;
-      white-space: pre-wrap;
-    }
-    .assistant { background: #17243a; }
-    .user { background: #214d80; }
-    .composer {
-      display: flex; gap: 12px; padding: 20px 28px;
-      border-top: 1px solid #263449;
-    }
-    input {
-      flex: 1; padding: 15px; border-radius: 10px;
-      border: 1px solid #344660; background: #142037;
-      color: white; font-size: 14px;
-    }
-    .send {
-      background: #367bdf; border: none; border-radius: 10px;
-      color: white; padding: 0 25px; cursor: pointer;
-    }
-    .cards {
-      max-width: 740px; margin: 0 auto 24px;
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-    }
-    .card {
-      background: #17243a; border: 1px solid #33445e;
-      color: white; border-radius: 12px; padding: 18px;
-      text-align: left; cursor: pointer;
-    }
-    .card:hover { border-color: #69a7ff; }
-    .card small { display: block; margin-top: 8px; color: #9aabc4; }
-    @media(max-width: 650px) {
-      aside { display: none; }
-      .chat { padding: 16px; }
-      header, .composer { padding: 15px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="app">
-    <aside>
-      <div class="brand">Platform Chatbot</div>
-      <p class="muted">Cluster Operations Assistant</p>
-      <div class="sidebar-title">Available Clusters</div>
-      <div class="cluster-nav" id="clusterNav"></div>
-    </aside>
+# Stage 1: Build the Go chatbot
+FROM INTERNAL_GO_BUILDER_IMAGE AS builder
 
-    <main>
-      <header>
-        <strong>Platform Assistant</strong>
-        <span class="status" id="status">Not connected</span>
-      </header>
+WORKDIR /build
 
-      <section class="chat" id="chat" aria-live="polite">
-        <div class="message assistant">
-Welcome to Platform Chatbot!
+# Use the approved internal Go dependency proxy
+ENV GOPROXY="INTERNAL_GO_PROXY_URL"
 
-I can help you discover available clusters and, after authentication is configured, manage authorized cluster resources.
+COPY go.mod go.sum ./
+RUN go mod download
 
-Choose a cluster below to get started.
-        </div>
-        <div class="cards" id="clusterCards"></div>
-      </section>
+COPY client/ ./client/
+COPY config/ ./config/
 
-      <form class="composer" id="chatForm">
-        <input id="messageInput" placeholder="Ask about available clusters..." autocomplete="off" aria-label="Chat message">
-        <button class="send" type="submit">Send</button>
-      </form>
-    </main>
-  </div>
+RUN CGO_ENABLED=0 GOOS=linux \
+    go build -o /build/chatbot ./client
 
-  <script>
-    let clusters = [];
+# Stage 2: Runtime image
+FROM INTERNAL_UBI_MINIMAL_IMAGE
 
-    function addMessage(text, role = "assistant") {
-      const chat = document.getElementById("chat");
-      const message = document.createElement("div");
-      message.className = "message " + role;
-      message.textContent = text;
-      chat.appendChild(message);
-      chat.scrollTop = chat.scrollHeight;
-    }
+WORKDIR /app
 
-    function selectCluster(cluster) {
-      addMessage("Connect to " + cluster.name, "user");
-      addMessage(
-        cluster.name + " is available in the cluster registry.\n\n" +
-        "Authentication is not configured yet. No cluster connection has been established."
-      );
-      document.getElementById("status").textContent = "Not connected";
-    }
+COPY --from=builder /build/chatbot /app/chatbot
+COPY --from=builder /build/client/index.html /app/client/index.html
+COPY --from=builder /build/config/clusters.yaml /app/config/clusters.yaml
 
-    function createClusterButton(cluster, className) {
-      const button = document.createElement("button");
-      button.className = className;
-      button.type = "button";
+# Support OpenShift arbitrary non-root UIDs
+USER 0
+RUN chgrp -R 0 /app && chmod -R g=u /app
 
-      const title = document.createElement("strong");
-      title.textContent = cluster.name;
+EXPOSE 8080
 
-      const description = document.createElement("small");
-      description.textContent = cluster.description;
+USER 1001
 
-      button.append(title, description);
-      button.addEventListener("click", () => selectCluster(cluster));
-      return button;
-    }
-
-    function renderClusters() {
-      const nav = document.getElementById("clusterNav");
-      const cards = document.getElementById("clusterCards");
-      nav.replaceChildren();
-      cards.replaceChildren();
-
-      for (const cluster of clusters) {
-        nav.appendChild(createClusterButton(cluster, ""));
-        cards.appendChild(createClusterButton(cluster, "card"));
-      }
-    }
-
-    async function loadClusters() {
-      try {
-        const response = await fetch("/api/clusters");
-        if (!response.ok) throw new Error("Unable to load clusters");
-
-        clusters = await response.json();
-        renderClusters();
-      } catch (error) {
-        addMessage("Unable to load the cluster registry. Please try again later.");
-        console.error(error);
-      }
-    }
-
-    document.getElementById("chatForm").addEventListener("submit", event => {
-      event.preventDefault();
-
-      const input = document.getElementById("messageInput");
-      const prompt = input.value.trim();
-      if (!prompt) return;
-
-      addMessage(prompt, "user");
-      input.value = "";
-
-      const normalized = prompt.toLowerCase();
-
-      if (normalized.includes("cluster") &&
-          (normalized.includes("list") ||
-           normalized.includes("show") ||
-           normalized.includes("available") ||
-           normalized.includes("what"))) {
-        addMessage(
-          "Available clusters:\n" +
-          clusters.map(cluster => "- " + cluster.name).join("\n")
-        );
-        return;
-      }
-
-      const matches = clusters.filter(cluster =>
-        normalized.includes(cluster.name.toLowerCase()) ||
-        normalized.includes(cluster.id.toLowerCase())
-      );
-
-      if (matches.length === 1) {
-        addMessage(
-          matches[0].name +
-          " is available. Select it from the cluster list to begin connecting.\n\n" +
-          "OAuth authentication will be added in the next phase."
-        );
-        return;
-      }
-
-      addMessage(
-        "I can currently help you discover available clusters. " +
-        "Cluster authentication and resource operations are not enabled yet."
-      );
-    });
-
-    loadClusters();
-  </script>
-</body>
-</html>
+CMD ["/app/chatbot"]
