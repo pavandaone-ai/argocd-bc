@@ -1,1 +1,2 @@
 oc get --raw /.well-known/oauth-authorization-server
+oc get authentication.config.openshift.io cluster -o jsonpath='{.spec.oauthMetadata.name}{"\n"}'
