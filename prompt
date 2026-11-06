@@ -1,17 +1,95 @@
-Ticket Title: Design and Implement OpenShift MCP-Based Platform Chatbot
+type ChatRequest struct {
+    Message string `json:"message"`
+}
 
-Description / Implementation Tasks:
+type ChatResponse struct {
+    Intent  string    `json:"intent"`
+    Message string    `json:"message"`
+    Cluster *Cluster  `json:"cluster,omitempty"`
+    Clusters []Cluster `json:"clusters,omitempty"`
+}
 
-Design the MCP-based chatbot architecture integrating the UI, LLM, MCP client/server, and OpenShift API.
 
-Develop a chatbot interface with multi-cluster discovery and selection capabilities.
 
-Integrate OpenShift OAuth/LDAP authentication and RBAC-based user authorization.
+func handleChat(message string, clusters []Cluster) ChatResponse {
+    text := strings.ToLower(strings.TrimSpace(message))
 
-Develop MCP tools for listing namespaces, pods, deployments, services, and routes.
+    // Detect the cluster mentioned by the user.
+    var selected *Cluster
+    for i := range clusters {
+        cluster := &clusters[i]
 
-Implement secure deployment restart and deletion operations with permission checks and audit logging.
+        if strings.Contains(text, strings.ToLower(cluster.Name)) ||
+            strings.Contains(text, strings.ToLower(cluster.ID)) {
+            selected = cluster
+            break
+        }
+    }
 
-Containerize the application and configure Jenkins CI/CD pipelines using internal registries.
+    // Recognize login requests.
+    if strings.Contains(text, "login") ||
+        strings.Contains(text, "log in") ||
+        strings.Contains(text, "connect") {
 
-Deploy to OpenShift using Deployments, Services, Routes, ConfigMaps, and Secrets, followed by end-to-end testing.
+        if selected != nil {
+            return ChatResponse{
+                Intent:  "login",
+                Message: "Authentication is required to connect to this cluster.",
+                Cluster: selected,
+            }
+        }
+
+        return ChatResponse{
+            Intent:  "select_cluster",
+            Message: "Which cluster would you like to connect to?",
+            Clusters: clusters,
+        }
+    }
+
+    // Recognize cluster discovery requests.
+    if strings.Contains(text, "cluster") ||
+        strings.Contains(text, "environment") {
+
+        return ChatResponse{
+            Intent:   "list_clusters",
+            Message:  "Here are the available clusters.",
+            Clusters: clusters,
+        }
+    }
+
+    return ChatResponse{
+        Intent:  "unknown",
+        Message: "I can help you discover available clusters or connect to a cluster.",
+    }
+}
+
+
+
+
+mux := http.NewServeMux()
+
+
+mux.HandleFunc("/api/chat", func(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodPost {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
+
+    var request ChatRequest
+
+    if err := json.NewDecoder(
+        http.MaxBytesReader(w, r.Body, 4096),
+    ).Decode(&request); err != nil {
+        http.Error(w, "Invalid request", http.StatusBadRequest)
+        return
+    }
+
+    response := handleChat(request.Message, clusters)
+
+    w.Header().Set("Content-Type", "application/json")
+    w.Header().Set("Cache-Control", "no-store")
+
+    if err := json.NewEncoder(w).Encode(response); err != nil {
+        log.Printf("Failed to encode chat response: %v", err)
+    }
+})
