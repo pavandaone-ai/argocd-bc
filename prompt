@@ -1,12 +1,1 @@
-if selected != nil {
-    return ChatResponse{
-        Intent:  "login",
-        Message: "Authentication is required to connect to this cluster.",
-        Cluster: selected,
-    }
-}
-
-return ChatResponse{
-    Intent:  "unknown",
-    Message: "I can help you discover available clusters or connect to a cluster.",
-}
+oc get --raw /.well-known/oauth-authorization-server
