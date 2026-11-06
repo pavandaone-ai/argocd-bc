@@ -1,3 +1,56 @@
-curl -X POST http://localhost:8080/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message":"Show me available clusters"}'
+document.getElementById("chatForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const input = document.getElementById("messageInput");
+    const prompt = input.value.trim();
+
+    if (!prompt) return;
+
+    addMessage(prompt, "user");
+    input.value = "";
+
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: prompt
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("Chat request failed");
+        }
+
+        const result = await response.json();
+
+        if (result.intent === "list_clusters") {
+            addMessage(
+                result.message + "\n\n" +
+                result.clusters.map(cluster => "- " + cluster.name).join("\n")
+            );
+        }
+        else if (result.intent === "login") {
+            addMessage(
+                result.message + "\n\n" +
+                "Selected cluster: " + result.cluster.name + "\n" +
+                "OpenShift OAuth login will be integrated next."
+            );
+        }
+        else if (result.intent === "select_cluster") {
+            addMessage(
+                result.message + "\n\n" +
+                result.clusters.map(cluster => "- " + cluster.name).join("\n")
+            );
+        }
+        else {
+            addMessage(result.message);
+        }
+
+    } catch (error) {
+        console.error(error);
+        addMessage("Unable to process your request. Please try again.");
+    }
+});
