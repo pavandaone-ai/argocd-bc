@@ -1,3 +1,1 @@
-oc get --raw /.well-known/oauth-authorization-server
-oc get authentication.config.openshift.io cluster -o jsonpath='{.spec.oauthMetadata.name}{"\n"}'
-curl -I "https://$(oc get route oauth-openshift -n openshift-authentication -o jsonpath='{.spec.host}')/oauth/authorize"
+oc get configmap default-ingress-cert -n openshift-config-managed -o jsonpath='{.data.ca-bundle\.crt}' >> ~/.paas-portal/sandbox-ca.crt
