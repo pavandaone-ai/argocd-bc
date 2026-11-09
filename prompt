@@ -21,3 +21,28 @@ func sandboxTLSConfig() *tls.Config {
 	}
 	return &tls.Config{RootCAs: pool}
 }
+----
+// apiClient calls the sandbox cluster API and verifies its
+// certificate against the cluster CA saved at
+// ~/.paas-portal/sandbox-ca.crt (built from the cluster's
+// kube-root-ca.crt and default-ingress-cert configmaps).
+var apiClient = &http.Client{
+	Timeout:   30 * time.Second,
+	Transport: &http.Transport{TLSClientConfig: sandboxTLSConfig()},
+}
+
+// sandboxTLSConfig builds a TLS config that trusts the sandbox
+// cluster's CA file in addition to the system roots.
+func sandboxTLSConfig() *tls.Config {
+	pool, err := x509.SystemCertPool()
+	if err != nil || pool == nil {
+		pool = x509.NewCertPool()
+	}
+	if home, herr := os.UserHomeDir(); herr == nil {
+		if b, rerr := os.ReadFile(filepath.Join(home, ".paas-portal", "sandbox-ca.crt")); rerr == nil {
+			pool.AppendCertsFromPEM(b)
+		}
+	}
+	return &tls.Config{RootCAs: pool}
+}
+
