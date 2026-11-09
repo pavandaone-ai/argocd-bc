@@ -1,1 +1,1 @@
-oc get configmap default-ingress-cert -n openshift-config-managed -o jsonpath='{.data.ca-bundle\.crt}' >> ~/.paas-portal/sandbox-ca.crt
+head -1 ~/.paas-portal/sandbox-ca.crt && grep -c "BEGIN CERTIFICATE" ~/.paas-portal/sandbox-ca.crt
