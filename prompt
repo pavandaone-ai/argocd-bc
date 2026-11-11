@@ -23,3 +23,12 @@ oc rollout status deployment/dell-csm-operator-controller-manager -n openshift-d
 
 
 oc get csm isilon -n isilon -o yaml | grep -A 5 'configVersion: v2.13.0'
+
+
+
+
+TOKEN=$(oc get secret  -n  -o jsonpath='{.data.svc-smartit-token}' | base64 -d)
+
+oc --token="$TOKEN" whoami
+
+unset TOKEN
