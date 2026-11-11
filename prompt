@@ -14,3 +14,4 @@ oc get csm isilon -n isilon -o jsonpath='{.spec.version}{"\n"}'
 
 
 oc get csm isilon -n isilon -o jsonpath='{.spec.driver.configVersion}{"\n"}'
+oc get csm isilon -n isilon -o jsonpath='{.spec.version}{" | "}{.spec.driver.common.image}{" | "}{.spec.driver.configVersion}{"\n"}'
