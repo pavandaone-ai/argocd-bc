@@ -15,3 +15,8 @@ oc get csm isilon -n isilon -o jsonpath='{.spec.version}{"\n"}'
 
 oc get csm isilon -n isilon -o jsonpath='{.spec.driver.configVersion}{"\n"}'
 oc get csm isilon -n isilon -o jsonpath='{.spec.version}{" | "}{.spec.driver.common.image}{" | "}{.spec.driver.configVersion}{"\n"}'
+
+
+oc rollout restart deployment/dell-csm-operator-controller-manager -n openshift-dell-csm
+
+oc rollout status deployment/dell-csm-operator-controller-manager -n openshift-dell-csm
