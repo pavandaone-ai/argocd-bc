@@ -20,3 +20,6 @@ oc get csm isilon -n isilon -o jsonpath='{.spec.version}{" | "}{.spec.driver.com
 oc rollout restart deployment/dell-csm-operator-controller-manager -n openshift-dell-csm
 
 oc rollout status deployment/dell-csm-operator-controller-manager -n openshift-dell-csm
+
+
+oc get csm isilon -n isilon -o yaml | grep -A 5 'configVersion: v2.13.0'
