@@ -32,3 +32,8 @@ TOKEN=$(oc get secret  -n  -o jsonpath='{.data.svc-smartit-token}' | base64 -d)
 oc --token="$TOKEN" whoami
 
 unset TOKEN
+
+
+oc get secret  \
+-o jsonpath='{.data.svc-smartit-token}' | \
+base64 -d | python -c 'import sys,json,base64,datetime; t=sys.stdin.read().strip(); p=t.split("."); d=json.loads(base64.urlsafe_b64decode(p[1]+"="*(-len(p[1])%4))); print("Identity:",d.get("sub")); print("Expires:",datetime.datetime.fromtimestamp(d["exp"],datetime.timezone.utc) if "exp" in d else "No expiry claim")'
