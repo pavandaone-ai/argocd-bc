@@ -6,3 +6,7 @@ I'm working on the Dell CSM operator upgrade from 1.13.1 to 1.13.2, and it's stu
 I checked the worker nodes. Four are already at 250/250 pods, and the remaining two are at 249/250.
 
 Usually, in this situation, do we add another worker node to increase capacity, or do we consider increasing the maximum pods per node? Wanted to check with you before making any changes.
+
+
+
+oc get pods --all-namespaces --no-headers | awk '{count[$1]++} END {for (ns in count) print ns, count[ns]}' | sort -k2nr | head -20
