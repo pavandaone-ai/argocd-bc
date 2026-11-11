@@ -1,1 +1,1 @@
-mkdir -p /c/Users//.paas-portal && cp ~/.paas-portal/oauth-secret /c/Users//.paas-portal/oauth-secret && ls -l /c/Users//.paas-portal/oauth-secret
+oc get nodes -o custom-columns=NAME:.metadata.name,MAX_PODS:.status.allocatable.pods
