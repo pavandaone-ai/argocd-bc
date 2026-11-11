@@ -1,1 +1,2 @@
 oc get nodes -o custom-columns=NAME:.metadata.name,MAX_PODS:.status.allocatable.pods
+oc get pods -A -o wide --field-selector=status.phase!=Succeeded,status.phase!=Failed | awk 'NR>1 {count[$8]++} END {for (node in count) print node, count[node]}'
