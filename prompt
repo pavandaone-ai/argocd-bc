@@ -11,3 +11,6 @@ Usually, in this situation, do we add another worker node to increase capacity, 
 
 oc get pods --all-namespaces --no-headers | awk '{count[$1]++} END {for (ns in count) print ns, count[ns]}' | sort -k2nr | head -20
 oc get csm isilon -n isilon -o jsonpath='{.spec.version}{"\n"}'
+
+
+oc get csm isilon -n isilon -o jsonpath='{.spec.driver.configVersion}{"\n"}'
