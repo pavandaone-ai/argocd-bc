@@ -1,1 +1,7 @@
-"&sysparm_display_value=all",
+**Planner Task: ServiceNow Integration – User Authorization Validation**
+
+**Subtask 1: Retrieve Requester Information from ServiceNow**
+- Enhance the existing Go automation to retrieve the requester's user ID, username, or email through ServiceNow REST APIs.
+
+**Subtask 2: Validate OpenShift RBAC Permissions**
+- Map the ServiceNow requester to an OpenShift user and validate namespace-level view permissions using SubjectAccessReview (SAR) before allowing application restarts.
