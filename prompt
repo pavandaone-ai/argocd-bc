@@ -1,8 +1,6 @@
-type result struct {
-    Number      string `json:"number"`
-    SysID       string `json:"sys_id"`
-    RequestedBy struct {
-        DisplayValue string `json:"display_value"`
-        Value        string `json:"value"`
-    } `json:"requested_by"`
+for _, crq := range resultData.Result {
+    fmt.Println("Requester Name:", crq.RequestedBy.DisplayValue)
+    fmt.Println("Requester ServiceNow ID:", crq.RequestedBy.Value)
+
+    crqSlice = append(crqSlice, crq.SysID)
 }
