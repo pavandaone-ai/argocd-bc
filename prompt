@@ -1,1 +1,8 @@
-"&sysparm_fields=number,short_description,assignment_group,description,state,sys_id,requested_by" +
+type result struct {
+    Number      string `json:"number"`
+    SysID       string `json:"sys_id"`
+    RequestedBy struct {
+        DisplayValue string `json:"display_value"`
+        Value        string `json:"value"`
+    } `json:"requested_by"`
+}
