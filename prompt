@@ -1,1 +1,3 @@
-fmt.Println("Requester User Link:", crq.RequestedBy.Link)
+GET https://<servicenow-host>/api/now/table/sys_user/<sys_id>?sysparm_fields=sys_id,user_name,email,name
+Authorization: Bearer <access_token>
+Accept: application/json
