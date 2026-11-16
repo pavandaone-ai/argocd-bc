@@ -1,6 +1,1 @@
-for _, crq := range resultData.Result {
-    fmt.Println("Requester Name:", crq.RequestedBy.DisplayValue)
-    fmt.Println("Requester ServiceNow ID:", crq.RequestedBy.Value)
-
-    crqSlice = append(crqSlice, crq.SysID)
-}
+fmt.Println("Requester User Link:", crq.RequestedBy.Link)
