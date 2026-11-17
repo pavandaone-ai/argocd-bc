@@ -1,1 +1,1 @@
-haproxy.router.openshift.io/rewrite-target: /ppx/api/v2/paymentmethods/store
+haproxy.router.openshift.io/rewrite-target: 
