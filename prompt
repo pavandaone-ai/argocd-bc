@@ -1,1 +1,1 @@
-curl -sk -o /dev/null -w '%{http_code}\n' "https://.com/"
+haproxy.router.openshift.io/rewrite-target: /ppx/api/v2/paymentmethods/store
