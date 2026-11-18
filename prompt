@@ -1,1 +1,1 @@
-haproxy.router.openshift.io/rewrite-target: 
+oc auth can-i create subjectaccessreviews.authorization.k8s.io
