@@ -1,1 +1,14 @@
-oc auth can-i create subjectaccessreviews.authorization.k8s.io
+oc create -f - -o yaml <<'EOF'
+apiVersion: authorization.k8s.io/v1
+kind: SubjectAccessReview
+spec:
+  user: 
+  groups:
+    - cluster-admins
+    - ose_cluster_admin
+  resourceAttributes:
+    namespace: 
+    verb: get
+    group: apps
+    resource: deployments
+EOF
