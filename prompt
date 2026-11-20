@@ -1,14 +1,15 @@
 import base64
 
-secrets = {
+secrets = """
+DB_USERNAME=admin
+DB_PASSWORD=password123
+API_KEY=abc123
+"""
 
-}
-
-for key, value in secrets.items():
+for line in secrets.strip().splitlines():
+    key, value = line.split("=", 1)
     encoded = base64.b64encode(value.encode("utf-8")).decode("utf-8")
-    print(f"{key}: {encoded}")
-
-
+    print(f"{key}={encoded}")
 
 
 
