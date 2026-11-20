@@ -1,5 +1,1 @@
-oc get secret  -n <namespace> -o json | jq -r '.data | keys[]'
-
-oc get deployment <deployment-name> -n <namespace> -o yaml | grep -A 8 -B 5 'logging_DB_URL'
-
-oc get secret  -n <namespace> -o jsonpath='{.data.logging_DB_URL}' | base64 -d
+oc exec deploy/ -- sh -c 'if [ -n "$LOGGING_DB_URL" ]; then echo "LOGGING_DB_URL is SET"; else echo "LOGGING_DB_URL is EMPTY"; fi'
