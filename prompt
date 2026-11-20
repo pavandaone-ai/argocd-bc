@@ -7,3 +7,34 @@ secrets = {
 for key, value in secrets.items():
     encoded = base64.b64encode(value.encode("utf-8")).decode("utf-8")
     print(f"{key}: {encoded}")
+
+
+
+
+
+import base64
+
+applications = {
+    "ABC": {
+        "DB_USERNAME": "admin",
+        "DB_PASSWORD": "password123"
+    },
+    "XYZ": {
+        "API_KEY": "abc123",
+        "TOKEN": "mytoken123"
+    },
+    "PROVIDER": {
+        "DB_USERNAME": "provider",
+        "DB_PASSWORD": "provider123"
+    }
+}
+
+for app_name, secrets in applications.items():
+    print(f"\nApplication: {app_name}")
+
+    for key, value in secrets.items():
+        encoded = base64.b64encode(
+            value.encode("utf-8")
+        ).decode("utf-8")
+
+        print(f"{key}: {encoded}")
