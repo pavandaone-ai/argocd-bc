@@ -6,7 +6,11 @@ DB_PASSWORD=password123
 API_KEY=abc123
 """
 
-for line in secrets.strip().splitlines():
+for line in secrets.splitlines():
+    if not line.strip():
+        print()
+        continue
+
     key, value = line.split("=", 1)
     encoded = base64.b64encode(value.encode("utf-8")).decode("utf-8")
     print(f"{key}={encoded}")
