@@ -1,14 +1,9 @@
-oc create -f - -o yaml <<'EOF'
-apiVersion: authorization.k8s.io/v1
-kind: SubjectAccessReview
-spec:
-  user: 
-  groups:
-    - cluster-admins
-    - ose_cluster_admin
-  resourceAttributes:
-    namespace: 
-    verb: get
-    group: apps
-    resource: deployments
-EOF
+import base64
+
+secrets = {
+
+}
+
+for key, value in secrets.items():
+    encoded = base64.b64encode(value.encode("utf-8")).decode("utf-8")
+    print(f"{key}: {encoded}")
