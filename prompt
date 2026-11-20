@@ -1,45 +1,5 @@
-import base64
+oc get secret  -n <namespace> -o json | jq -r '.data | keys[]'
 
-secrets = """
-DB_USERNAME=admin
-DB_PASSWORD=password123
-API_KEY=abc123
-"""
+oc get deployment <deployment-name> -n <namespace> -o yaml | grep -A 8 -B 5 'logging_DB_URL'
 
-for line in secrets.splitlines():
-    if not line.strip():
-        print()
-        continue
-
-    key, value = line.split("=", 1)
-    encoded = base64.b64encode(value.encode("utf-8")).decode("utf-8")
-    print(f"{key}={encoded}")
-
-
-
-import base64
-
-applications = {
-    "ABC": {
-        "DB_USERNAME": "admin",
-        "DB_PASSWORD": "password123"
-    },
-    "XYZ": {
-        "API_KEY": "abc123",
-        "TOKEN": "mytoken123"
-    },
-    "PROVIDER": {
-        "DB_USERNAME": "provider",
-        "DB_PASSWORD": "provider123"
-    }
-}
-
-for app_name, secrets in applications.items():
-    print(f"\nApplication: {app_name}")
-
-    for key, value in secrets.items():
-        encoded = base64.b64encode(
-            value.encode("utf-8")
-        ).decode("utf-8")
-
-        print(f"{key}: {encoded}")
+oc get secret  -n <namespace> -o jsonpath='{.data.logging_DB_URL}' | base64 -d
