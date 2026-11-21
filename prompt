@@ -1,1 +1,23 @@
-oc exec deploy/ -- sh -c 'if [ -n "$LOGGING_DB_URL" ]; then echo "LOGGING_DB_URL is SET"; else echo "LOGGING_DB_URL is EMPTY"; fi'
+#!/bin/bash
+
+SRC="quay-enterprise.apps."
+DEST="quay-enterprise.apps."
+ORG="paas"
+
+REPOS=(
+  "repository-2"
+  "repository-3"
+  "repository-4"
+)
+
+for REPO in "${REPOS[@]}"; do
+  echo "Copying $REPO..."
+
+  if skopeo copy --all \
+    "docker://$SRC/$ORG/$REPO:latest" \
+    "docker://$DEST/$ORG/$REPO:latest"; then
+    echo "SUCCESS: $REPO"
+  else
+    echo "FAILED: $REPO"
+  fi
+done
